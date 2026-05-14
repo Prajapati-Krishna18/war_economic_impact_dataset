@@ -1,11 +1,18 @@
-// Database connection configuration can go here
+const mongoose = require('mongoose');
+const logger = require('../utils/logger'); // Using the structured logger we created
+
 const connectDB = async () => {
   try {
-    // Add your database connection logic here
-    console.log('Database connected successfully');
+    if (!process.env.MONGO_URI) {
+      throw new Error('MONGO_URI is not defined in environment variables');
+    }
+
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+
+    logger.info(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
-    console.error('Database connection failed:', error);
-    process.exit(1);
+    logger.error(`Database connection failed: ${error.message}`);
+    process.exit(1); // Exit process with failure
   }
 };
 
