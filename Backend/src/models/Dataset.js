@@ -1,15 +1,63 @@
 const mongoose = require('mongoose');
 
-const datasetSchema = new mongoose.Schema({
-  // Define your schema fields here based on your dataset structure
-  // For example:
-  // year: { type: Number },
-  // country: { type: String },
-  // economicImpact: { type: Number },
+const DatasetSchema = new mongoose.Schema({
+  country: {
+    type: String,
+    required: [true, 'Country name is required'],
+    trim: true,
+    index: true // Indexed for faster search
+  },
+  region: {
+    type: String,
+    required: [true, 'Region is required'],
+    trim: true,
+    index: true // Indexed for filtering by region
+  },
+  year: {
+    type: Number,
+    required: [true, 'Year is required'],
+    min: [1800, 'Year must be greater than or equal to 1800'],
+    max: [new Date().getFullYear(), 'Year cannot be in the future'],
+    index: true
+  },
+  // Embedding related economic metrics inside a sub-object
+  economicMetrics: { 
+    inflationRate: {
+      type: Number,
+      default: null, // null if data is missing
+    },
+    gdpGrowth: {
+      type: Number,
+      default: null
+    },
+    unemploymentRate: {
+      type: Number,
+      default: null,
+      min: [0, 'Unemployment rate cannot be negative'],
+      max: [100, 'Unemployment rate cannot exceed 100%']
+    }
+  },
+  status: {
+    type: String,
+    enum: {
+      values: ['stable', 'at-risk', 'crisis', 'post-conflict recovery'],
+      message: '{VALUE} is not a valid status'
+    },
+    default: 'stable',
+    index: true
+  },
+  // Implementing a reference to another collection (Conflict)
+  conflictReference: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Conflict', 
+    default: null
+  }
 }, { 
-  // Explicitly tell Mongoose to use the "dataset" collection
   collection: 'dataset',
-  timestamps: true 
+  timestamps: true // Automatically adds createdAt and updatedAt
 });
 
-module.exports = mongoose.model('Dataset', datasetSchema);
+// Compound index to ensure we don't have duplicate records for a country in the same year
+DatasetSchema.index({ country: 1, year: 1 }, { unique: true });
+
+module.exports = mongoose.model('Dataset', DatasetSchema);
