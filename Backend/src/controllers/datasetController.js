@@ -22,12 +22,14 @@ exports.createDataset = asyncHandler(async (req, res, next) => {
  * @access  Public
  */
 exports.getAllDatasets = asyncHandler(async (req, res, next) => {
-  const datasets = await datasetService.getAllDatasets(req.query);
+  const result = await datasetService.getAllDatasets(req.query);
   
   res.status(200).json({
     success: true,
-    count: datasets.length,
-    data: datasets
+    count: result.count,
+    total: result.total,
+    pagination: result.pagination,
+    data: result.data
   });
 });
 
