@@ -7,15 +7,19 @@ const {
   deleteDataset
 } = require('../controllers/datasetController');
 
+// Import authentication middlewares
+const { protect, authorize } = require('../middlewares/authMiddleware');
+
 const router = express.Router();
 
+// Route configuration with middleware chaining
 router.route('/')
-  .post(createDataset)
-  .get(getAllDatasets);
+  .post(protect, authorize('admin', 'researcher'), createDataset)
+  .get(getAllDatasets); // Public
 
 router.route('/:id')
-  .get(getDatasetById)
-  .put(updateDataset)
-  .delete(deleteDataset);
+  .get(getDatasetById) // Public
+  .put(protect, authorize('admin', 'researcher'), updateDataset)
+  .delete(protect, authorize('admin'), deleteDataset);
 
 module.exports = router;
