@@ -72,7 +72,7 @@ exports.updateDataset = asyncHandler(async (req, res, next) => {
 /**
  * @desc    Delete a dataset record
  * @route   DELETE /api/v1/datasets/:id
- * @access  Public
+ * @access  Private/Admin
  */
 exports.deleteDataset = asyncHandler(async (req, res, next) => {
   const dataset = await datasetService.deleteDataset(req.params.id);
@@ -84,5 +84,21 @@ exports.deleteDataset = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: {} 
+  });
+});
+
+/**
+ * @desc    Get aggregated economic analytics by region
+ * @route   GET /api/v1/datasets/analytics/regions
+ * @access  Public
+ */
+exports.getRegionAnalytics = asyncHandler(async (req, res, next) => {
+  const { startYear, endYear } = req.query;
+  const analytics = await datasetService.getRegionAnalytics(startYear, endYear);
+
+  res.status(200).json({
+    success: true,
+    count: analytics.length,
+    data: analytics
   });
 });

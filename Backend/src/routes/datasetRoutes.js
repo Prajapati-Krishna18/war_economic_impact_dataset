@@ -4,13 +4,18 @@ const {
   getAllDatasets,
   getDatasetById,
   updateDataset,
-  deleteDataset
+  deleteDataset,
+  getRegionAnalytics
 } = require('../controllers/datasetController');
 
 // Import authentication middlewares
 const { protect, authorize } = require('../middlewares/authMiddleware');
 
 const router = express.Router();
+
+// Analytics endpoints (must be defined before /:id)
+router.route('/analytics/regions')
+  .get(getRegionAnalytics); // Public
 
 // Route configuration with middleware chaining
 router.route('/')
