@@ -1,4 +1,4 @@
-const Dataset = require('../models/Dataset');
+ const Dataset = require('../models/Dataset');
 
 class DatasetService {
   /**
@@ -111,6 +111,57 @@ class DatasetService {
    */
   async deleteDataset(id) {
     return await Dataset.findByIdAndDelete(id);
+  }
+
+  /**
+   * Get economic analytics grouped by region
+   * Uses MongoDB Aggregation Pipeline
+   * @param {Number} startYear 
+   * @param {Number} endYear 
+   * @returns {Array} aggregated analytics data
+   */
+  async getRegionAnalytics(startYear, endYear) {
+    const matchStage = {};
+    
+    // Optional dynamic filtering by year
+    if (startYear || endYear) {
+      matchStage.year = {};
+      if (startYear) matchStage.year.$gte = parseInt(startYear, 10);
+      if (endYear) matchStage.year.$lte = parseInt(endYear, 10);
+    }
+
+    const pipeline = [
+      // Stage 1: Match records based on criteria
+      { $match: matchStage },
+      
+      // Stage 2: Group by region and calculate metrics
+      {
+        $group: {
+          _id: '$region',
+          totalRecords: { $sum: 1 },
+          avgInflation: { $avg: '$economicMetrics.inflationRate' },
+          avgGdpGrowth: { $avg: '$economicMetrics.gdpGrowth' },
+          avgUnemployment: { $avg: '$economicMetrics.unemploymentRate' }
+        }
+      },
+      
+      // Stage 3: Project (format) the output
+      {
+        $project: {
+          _id: 0,
+          region: '$_id',
+          totalRecords: 1,
+          avgInflation: { $round: ['$avgInflation', 2] },
+          avgGdpGrowth: { $round: ['$avgGdpGrowth', 2] },
+          avgUnemployment: { $round: ['$avgUnemployment', 2] }
+        }
+      },
+      
+      // Stage 4: Sort by region alphabetically
+      { $sort: { region: 1 } }
+    ];
+
+    return await Dataset.aggregate(pipeline);
   }
 }
 
