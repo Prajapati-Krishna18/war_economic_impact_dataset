@@ -60,4 +60,10 @@ const DatasetSchema = new mongoose.Schema({
 // Compound index to ensure we don't have duplicate records for a country in the same year
 DatasetSchema.index({ country: 1, year: 1 }, { unique: true });
 
+// Text index to heavily optimize search operations (replacing slow regex)
+DatasetSchema.index({ country: 'text', region: 'text' }, { weights: { country: 10, region: 5 } });
+
+// Compound index to optimize the analytics aggregation pipeline (filtering by year, grouping by region)
+DatasetSchema.index({ region: 1, year: -1 });
+
 module.exports = mongoose.model('Dataset', DatasetSchema);

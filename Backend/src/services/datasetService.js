@@ -29,12 +29,9 @@ class DatasetService {
     
     let parsedQuery = JSON.parse(queryStr);
 
-    // Regex-based search (e.g., search by country or region)
+    // Text-based search (highly optimized compared to regex)
     if (reqQuery.search) {
-      parsedQuery.$or = [
-        { country: { $regex: reqQuery.search, $options: 'i' } },
-        { region: { $regex: reqQuery.search, $options: 'i' } }
-      ];
+      parsedQuery.$text = { $search: reqQuery.search };
     }
 
     let query = Dataset.find(parsedQuery).populate('conflictReference');
