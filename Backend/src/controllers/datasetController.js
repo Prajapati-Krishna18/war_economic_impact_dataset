@@ -1,6 +1,7 @@
 const datasetService = require('../services/datasetService');
 const asyncHandler = require('../middlewares/asyncHandler');
 const ErrorResponse = require('../utils/errorResponse');
+const ApiResponse = require('../utils/apiResponse');
 
 /**
  * @desc    Create a new dataset record
@@ -10,10 +11,7 @@ const ErrorResponse = require('../utils/errorResponse');
 exports.createDataset = asyncHandler(async (req, res, next) => {
   const dataset = await datasetService.createDataset(req.body);
   
-  res.status(201).json({
-    success: true,
-    data: dataset
-  });
+  new ApiResponse(201, dataset, 'Dataset created successfully').send(res);
 });
 
 /**
@@ -24,13 +22,13 @@ exports.createDataset = asyncHandler(async (req, res, next) => {
 exports.getAllDatasets = asyncHandler(async (req, res, next) => {
   const result = await datasetService.getAllDatasets(req.query);
   
-  res.status(200).json({
-    success: true,
+  const meta = {
     count: result.count,
     total: result.total,
-    pagination: result.pagination,
-    data: result.data
-  });
+    pagination: result.pagination
+  };
+
+  new ApiResponse(200, result.data, 'Datasets fetched successfully', meta).send(res);
 });
 
 /**
@@ -45,10 +43,7 @@ exports.getDatasetById = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Dataset not found', 404));
   }
 
-  res.status(200).json({
-    success: true,
-    data: dataset
-  });
+  new ApiResponse(200, dataset, 'Dataset fetched successfully').send(res);
 });
 
 /**
@@ -63,10 +58,7 @@ exports.updateDataset = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Dataset not found', 404));
   }
 
-  res.status(200).json({
-    success: true,
-    data: dataset
-  });
+  new ApiResponse(200, dataset, 'Dataset updated successfully').send(res);
 });
 
 /**
@@ -81,10 +73,7 @@ exports.deleteDataset = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Dataset not found', 404));
   }
 
-  res.status(200).json({
-    success: true,
-    data: {} 
-  });
+  new ApiResponse(200, {}, 'Dataset deleted successfully').send(res);
 });
 
 /**
@@ -96,9 +85,5 @@ exports.getRegionAnalytics = asyncHandler(async (req, res, next) => {
   const { startYear, endYear } = req.query;
   const analytics = await datasetService.getRegionAnalytics(startYear, endYear);
 
-  res.status(200).json({
-    success: true,
-    count: analytics.length,
-    data: analytics
-  });
+  new ApiResponse(200, analytics, 'Region analytics fetched successfully', { count: analytics.length }).send(res);
 });
