@@ -1,13 +1,12 @@
 const express = require('express');
-const { getHealthStatus } = require('../controllers/healthController');
-const datasetRoutes = require('./datasetRoutes');
-const authRoutes = require('./authRoutes');
+const v1Routes = require('./v1');
 
 const router = express.Router();
 
-router.get('/health', getHealthStatus);
+// Mount API version 1
+router.use('/v1', v1Routes);
 
-router.use('/datasets', datasetRoutes);
-router.use('/auth', authRoutes);
+// Future versions (e.g. v2) will be mounted here
+// router.use('/v2', v2Routes);
 
 module.exports = router;

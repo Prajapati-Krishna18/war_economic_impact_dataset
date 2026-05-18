@@ -6,10 +6,10 @@ const {
   updateDataset,
   deleteDataset,
   getRegionAnalytics
-} = require('../controllers/datasetController');
+} = require('../../controllers/datasetController');
 
 // Import authentication middlewares
-const { protect, authorize } = require('../middlewares/authMiddleware');
+const { protect, authorize } = require('../../middlewares/authMiddleware');
 
 const router = express.Router();
 

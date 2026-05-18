@@ -46,8 +46,8 @@ app.get('/', (req, res) => {
   res.send('Welcome to the War Economic Impact API. Access endpoints via /api/v1');
 });
 
-// Routes
-app.use('/api/v1', routes);
+// Main API Router (Handles versioning inside)
+app.use('/api', routes);
 
 // Error Handling Middleware
 app.use(errorHandler);
