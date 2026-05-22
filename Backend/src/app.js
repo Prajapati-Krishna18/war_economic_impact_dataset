@@ -8,17 +8,15 @@ const routes = require('./routes');
 const { errorHandler } = require('./middlewares/errorMiddleware');
 const { requestLogger } = require('./middlewares/loggerMiddleware');
 
+const { apiLimiter } = require('./middlewares/rateLimiter');
+
 const app = express();
 
 // Set security HTTP headers
 app.use(helmet());
 
-// Rate limiting (e.g., max 100 requests per 10 mins)
-const limiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 10 * 60 * 1000, 
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS, 10) || 100
-});
-app.use('/api/', limiter);
+// Apply standard API rate limiting to all /api/ routes globally
+app.use('/api/', apiLimiter);
 
 // Prevent NoSQL injections by sanitizing user-supplied data
 app.use(mongoSanitize());
