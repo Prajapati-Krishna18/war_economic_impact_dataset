@@ -1,0 +1,369 @@
+{
+  "info": {
+    "_postman_id": "6204193f-537a-4c5f-8024-22a17c0a4e0e",
+    "name": "War Economic Impact API",
+    "description": "Comprehensive API documentation for the War Economic Impact Dataset. Includes standardized JSON responses, JWT-based authentication flows, and aggregated economic metrics.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Get API Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Returns the system health, database connection state, and server uptime."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Researcher\",\n  \"email\": \"researcher@test.com\",\n  \"password\": \"SecurePassword123\",\n  \"role\": \"researcher\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Register a new user account. Returns a JWT token."
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if(jsonData.data && jsonData.data.token) {",
+                  "    pm.environment.set(\"jwt_token\", jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"researcher@test.com\",\n  \"password\": \"SecurePassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Authenticate user and receive a JWT token. This token is automatically saved to your Postman environment variables if using the test script."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User (Me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            },
+            "description": "Returns the profile of the currently authenticated user."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Datasets",
+      "item": [
+        {
+          "name": "Create Dataset",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"country\": \"Syria\",\n  \"region\": \"Middle East\",\n  \"year\": 2015,\n  \"economicMetrics\": {\n    \"inflationRate\": 38.0,\n    \"gdpGrowth\": -10.5,\n    \"unemploymentRate\": 48.0\n  },\n  \"status\": \"crisis\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/datasets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "datasets"
+              ]
+            },
+            "description": "Creates a new dataset entry. Requires Authentication and 'Admin' or 'Researcher' role."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Datasets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/datasets?page=1&limit=10&region=Middle East&sort=-year",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "datasets"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number for pagination"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Number of results per page"
+                },
+                {
+                  "key": "region",
+                  "value": "Middle East",
+                  "description": "Filter by region"
+                },
+                {
+                  "key": "sort",
+                  "value": "-year",
+                  "description": "Sort order (prefix with '-' for descending)"
+                },
+                {
+                  "key": "economicMetrics.inflationRate[gt]",
+                  "value": "20",
+                  "description": "Advanced MongoDB filtering (e.g., inflationRate > 20)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Fetches a paginated list of datasets. Supports advanced filtering, sorting, and field selection."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Dataset By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/datasets/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "datasets",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ENTER_MONGO_ID_HERE"
+                }
+              ]
+            },
+            "description": "Retrieve a single dataset record by its exact MongoDB ObjectId."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Dataset",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"recovery\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/datasets/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "datasets",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ENTER_MONGO_ID_HERE"
+                }
+              ]
+            },
+            "description": "Updates an existing dataset. Requires Authentication."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Dataset",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/datasets/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "datasets",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ENTER_MONGO_ID_HERE"
+                }
+              ]
+            },
+            "description": "Permanently deletes a dataset record. Requires Authentication and 'Admin' role."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Region Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/datasets/analytics/regions?startYear=2000&endYear=2024",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "datasets",
+                "analytics",
+                "regions"
+              ],
+              "query": [
+                {
+                  "key": "startYear",
+                  "value": "2000"
+                },
+                {
+                  "key": "endYear",
+                  "value": "2024"
+                }
+              ]
+            },
+            "description": "Executes a highly optimized MongoDB Aggregation Pipeline to return average economic metrics grouped by region."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
