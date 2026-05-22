@@ -102,12 +102,16 @@ class DatasetService {
   }
 
   /**
-   * Delete a dataset record
+   * Soft delete a dataset record
    * @param {String} id 
-   * @returns {Object|null} deleted dataset or null
+   * @returns {Object|null} soft deleted dataset or null
    */
   async deleteDataset(id) {
-    return await Dataset.findByIdAndDelete(id);
+    return await Dataset.findByIdAndUpdate(
+      id, 
+      { isDeleted: true, deletedAt: new Date() }, 
+      { new: true }
+    );
   }
 
   /**

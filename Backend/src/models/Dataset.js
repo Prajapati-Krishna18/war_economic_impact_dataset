@@ -51,6 +51,16 @@ const DatasetSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Conflict', 
     default: null
+  },
+  // Soft Delete fields
+  isDeleted: {
+    type: Boolean,
+    default: false,
+    index: true
+  },
+  deletedAt: {
+    type: Date,
+    default: null
   }
 }, { 
   collection: 'dataset',
@@ -65,5 +75,20 @@ DatasetSchema.index({ country: 'text', region: 'text' }, { weights: { country: 1
 
 // Compound index to optimize the analytics aggregation pipeline (filtering by year, grouping by region)
 DatasetSchema.index({ region: 1, year: -1 });
+
+// Soft delete middlewares
+// Filter out soft-deleted documents from find operations
+DatasetSchema.pre(/^find/, function(next) {
+  if (this.getOptions().includeDeleted !== true) {
+    this.where({ isDeleted: { $ne: true } });
+  }
+  next();
+});
+
+// Filter out soft-deleted documents from aggregation pipelines
+DatasetSchema.pre('aggregate', function(next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
+});
 
 module.exports = mongoose.model('Dataset', DatasetSchema);
