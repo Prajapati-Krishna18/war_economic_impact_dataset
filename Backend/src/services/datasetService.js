@@ -1,4 +1,5 @@
  const Dataset = require('../models/Dataset');
+const QueryBuilder = require('../utils/queryBuilder');
 
 class DatasetService {
   /**
@@ -17,64 +18,22 @@ class DatasetService {
    * @returns {Object} query results with pagination and metadata
    */
   async getAllDatasets(reqQuery = {}) {
-    const queryCopy = { ...reqQuery };
+    // We instantiate the query builder with a base query
+    const builder = new QueryBuilder(Dataset.find().populate('conflictReference'), reqQuery)
+      .filter()
+      .sort()
+      .limitFields();
 
-    // Fields to exclude from standard matching
-    const removeFields = ['select', 'sort', 'page', 'limit', 'search'];
-    removeFields.forEach(param => delete queryCopy[param]);
+    // Await pagination to resolve the count query
+    await builder.paginate(Dataset);
 
-    // Create query string with MongoDB operators ($gt, $gte, etc)
-    let queryStr = JSON.stringify(queryCopy);
-    queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
-    
-    let parsedQuery = JSON.parse(queryStr);
-
-    // Text-based search (highly optimized compared to regex)
-    if (reqQuery.search) {
-      parsedQuery.$text = { $search: reqQuery.search };
-    }
-
-    let query = Dataset.find(parsedQuery).populate('conflictReference');
-
-    // Select Fields
-    if (reqQuery.select) {
-      const fields = reqQuery.select.split(',').join(' ');
-      query = query.select(fields);
-    }
-
-    // Sort
-    if (reqQuery.sort) {
-      const sortBy = reqQuery.sort.split(',').join(' ');
-      query = query.sort(sortBy);
-    } else {
-      query = query.sort('-createdAt');
-    }
-
-    // Pagination
-    const page = parseInt(reqQuery.page, 10) || 1;
-    const limit = parseInt(reqQuery.limit, 10) || 25;
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-    const total = await Dataset.countDocuments(parsedQuery);
-
-    query = query.skip(startIndex).limit(limit).lean();
-
-    // Execute query
-    const results = await query;
-
-    // Pagination result
-    const pagination = {};
-    if (endIndex < total) {
-      pagination.next = { page: page + 1, limit };
-    }
-    if (startIndex > 0) {
-      pagination.prev = { page: page - 1, limit };
-    }
+    // Execute the fully constructed Mongoose query
+    const results = await builder.query.lean();
 
     return {
       count: results.length,
-      total,
-      pagination,
+      total: builder.total,
+      pagination: builder.pagination,
       data: results
     };
   }
