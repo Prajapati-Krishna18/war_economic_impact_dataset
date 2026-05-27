@@ -1,4 +1,5 @@
  const Dataset = require('../models/Dataset');
+const Conflict = require('../models/Conflict'); // Ensure Conflict model is registered for population
 const QueryBuilder = require('../utils/queryBuilder');
 
 class DatasetService {

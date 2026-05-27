@@ -88,8 +88,9 @@ You can quickly populate your local MongoDB with mock data using the included se
 * **Destroy Data:** `npm run data:destroy`
 
 ### Postman API Documentation
-To quickly test endpoints without building a frontend, import the Postman collection located at:
-`Backend/docs/War_Economic_Impact_API.postman_collection.json`
+To quickly test endpoints without building a frontend:
+1. Access the **[Live Postman API Documentation](https://documenter.getpostman.com/view/50840969/2sBXwmRD8o)**.
+2. Or import the local collection file located at: `Backend/docs/War_Economic_Impact_API.postman_collection.json`
 *Includes automated JWT extraction tests and predefined JSON body payloads.*
 
 ---

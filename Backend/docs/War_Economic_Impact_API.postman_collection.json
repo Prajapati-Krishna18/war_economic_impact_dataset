@@ -34,6 +34,20 @@
       "item": [
         {
           "name": "Register User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if(jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set(\"jwt_token\", jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -69,7 +83,7 @@
                 "exec": [
                   "var jsonData = pm.response.json();",
                   "if(jsonData.data && jsonData.data.token) {",
-                  "    pm.environment.set(\"jwt_token\", jsonData.data.token);",
+                  "    pm.collectionVariables.set(\"jwt_token\", jsonData.data.token);",
                   "}"
                 ],
                 "type": "text/javascript"
