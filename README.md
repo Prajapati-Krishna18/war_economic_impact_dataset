@@ -8,8 +8,9 @@
 [![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)](https://expressjs.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)](https://jwt.io/)
+[![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)](https://documenter.getpostman.com/view/50840969/2sBXwmRD8o)
 
-[Explore Docs](#) · [Report Bug](#) · [Request Feature](#)
+[Explore Docs](https://documenter.getpostman.com/view/50840969/2sBXwmRD8o) · [Report Bug](#) · [Request Feature](#)
 
 </div>
 

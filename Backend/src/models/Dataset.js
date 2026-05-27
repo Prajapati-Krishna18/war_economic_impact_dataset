@@ -40,7 +40,7 @@ const DatasetSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: {
-      values: ['stable', 'at-risk', 'crisis', 'post-conflict recovery'],
+      values: ['stable', 'at-risk', 'crisis', 'post-conflict recovery', 'resolved'],
       message: '{VALUE} is not a valid status'
     },
     default: 'stable',
@@ -82,13 +82,13 @@ DatasetSchema.pre(/^find/, function(next) {
   if (this.getOptions().includeDeleted !== true) {
     this.where({ isDeleted: { $ne: true } });
   }
-  next();
+  if (typeof next === 'function') next();
 });
 
 // Filter out soft-deleted documents from aggregation pipelines
 DatasetSchema.pre('aggregate', function(next) {
   this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
-  next();
+  if (typeof next === 'function') next();
 });
 
 module.exports = mongoose.model('Dataset', DatasetSchema);
