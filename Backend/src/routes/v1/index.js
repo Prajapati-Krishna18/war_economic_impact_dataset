@@ -1,13 +1,40 @@
 const express = require('express');
-const { getHealthStatus } = require('../../controllers/healthController');
-const datasetRoutes = require('./datasetRoutes');
-const authRoutes = require('./authRoutes');
+const { getHealthStatus, getVersion, headHealth } = require('../../controllers/healthController');
+const conflictRoutes  = require('./conflictRoutes');
+const datasetRoutes   = require('./datasetRoutes');
+const authRoutes      = require('./authRoutes');
+const statsRoutes     = require('./statsRoutes');
+const searchRoutes    = require('./searchRoutes');
+const adminRoutes     = require('./adminRoutes');
+const jwtRoutes       = require('./jwtRoutes');
 
 const router = express.Router();
 
-router.get('/health', getHealthStatus);
+// ── Health & Version ─────────────────────────────────────────────────────────
+router.get('/health',   getHealthStatus);
+router.head('/health',  headHealth);
+router.get('/version',  getVersion);
 
-router.use('/datasets', datasetRoutes);
-router.use('/auth', authRoutes);
+// ── Compare ──────────────────────────────────────────────────────────────────
+router.get('/compare', require('../../controllers/conflictController').compareConflicts);
+
+// ── Core Resources ───────────────────────────────────────────────────────────
+router.use('/conflicts',  conflictRoutes);
+router.use('/datasets',   datasetRoutes);
+
+// ── Auth ─────────────────────────────────────────────────────────────────────
+router.use('/auth',       authRoutes);
+
+// ── JWT ──────────────────────────────────────────────────────────────────────
+router.use('/jwt',        jwtRoutes);
+
+// ── Statistics ───────────────────────────────────────────────────────────────
+router.use('/stats',      statsRoutes);
+
+// ── Search ───────────────────────────────────────────────────────────────────
+router.use('/search',     searchRoutes);
+
+// ── Admin (protected) ────────────────────────────────────────────────────────
+router.use('/admin',      adminRoutes);
 
 module.exports = router;
