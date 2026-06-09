@@ -1,9 +1,57 @@
-import { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { Shield, LogOut, Database, TrendingUp, AlertTriangle, Globe } from 'lucide-react';
+import {
+  FileDown,
+  Globe,
+  Sliders,
+  TrendingUp,
+  ShieldAlert,
+  ArrowLeftRight,
+  Briefcase,
+  FileText,
+  Bell,
+  Settings as SettingsIcon,
+  HelpCircle,
+  Clock,
+  ChevronDown,
+  AlertOctagon,
+  Search,
+  BookOpen,
+  Anchor,
+  Filter,
+  CheckCircle,
+  CornerDownRight,
+  AlertTriangle,
+  UserPlus,
+  RefreshCw,
+} from 'lucide-react';
+
+import Sidebar from './components/Sidebar';
+import Topbar from './components/Topbar';
+import KPICards from './components/KPICards';
+import HealthSummary from './components/HealthSummary';
+import AlertIntelligence from './components/AlertIntelligence';
+import DashboardBottomRow from './components/DashboardBottomRow';
+import FormsModal from './components/FormsModal';
+import RegionalIntelligence from './components/RegionalIntelligence';
+import IndicatorsIndex from './components/IndicatorsIndex';
+import ConflictAnalytics from './components/ConflictAnalytics';
+import GlobalTradeIntelligence from './components/GlobalTradeIntelligence';
+import UserAdministration from './components/UserAdministration';
+import IntelligenceReports from './components/IntelligenceReports';
+import NotificationHub from './components/NotificationHub';
+import PlatformConfiguration from './components/PlatformConfiguration';
+import SearchOverlay from './components/SearchOverlay';
 import SignIn from './components/SignIn';
 
-// Dashboard component to represent the Home route
+import type { SidebarTab, KPICardData, AlertData, ActivityData, ReportData } from './types';
+import {
+  initialKPICards,
+  initialAlerts,
+  initialActivities,
+  initialReports,
+} from './mockData';
+
 interface DashboardProps {
   onSignOut: () => void;
   userEmail: string;
@@ -11,171 +59,334 @@ interface DashboardProps {
 }
 
 function Dashboard({ onSignOut, userEmail, onShowToast }: DashboardProps) {
-  const navigate = useNavigate();
+  // Navigation & Hierarchy State
+  const [activeTab, setActiveTab] = useState<SidebarTab>('Dashboard');
+  const [selectedRegion, setSelectedRegion] = useState<string>('Global');
+  const [timeRange, setTimeRange] = useState<string>('Last 30 Days');
 
-  const handleSignOutClick = () => {
-    onSignOut();
-    onShowToast("SECURE DE-AUTHORIZATION COMPLETED: TERMINATED SESSION", "info");
-    navigate('/signin?logout=true');
+  // Search Engine
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchOverlayOpen, setIsSearchOverlayOpen] = useState(false);
+
+  useEffect(() => {
+    const handleGlobalK = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsSearchOverlayOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleGlobalK);
+    return () => window.removeEventListener('keydown', handleGlobalK);
+  }, []);
+
+  // Live Database State (allowing active additions!)
+  const [alerts, setAlerts] = useState<AlertData[]>(initialAlerts);
+  const [activities, setActivities] = useState<ActivityData[]>(initialActivities);
+  const [reports, setReports] = useState<ReportData[]>(initialReports);
+
+  // Popups & Command Modals
+  const [modalType, setModalType] = useState<'createAlert' | 'scheduleReport' | 'inviteUser' | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Badge alert counting
+  const unreadAlertsCount = useMemo(() => {
+    return alerts.filter((a) => a.severity === 'critical').length;
+  }, [alerts]);
+
+  // Handle Quick actions click from header and cards
+  const openActionForm = (type: 'createAlert' | 'scheduleReport' | 'inviteUser') => {
+    setModalType(type);
+    setIsModalOpen(true);
   };
 
+  // Adding alert dynamically from form
+  const handleAddNewAlert = (rawAlert: Omit<AlertData, 'id' | 'timeAgo' | 'timestamp'>) => {
+    const freshAlert: AlertData = {
+      ...rawAlert,
+      id: `alert-${Date.now()}`,
+      timeAgo: 'Just now',
+      timestamp: new Date(),
+    };
+    setAlerts((prev) => [freshAlert, ...prev]);
+
+    // Prepend matching activity feed
+    const freshActivity: ActivityData = {
+      id: `act-${Date.now()}`,
+      title: `CRITICAL ALERT: ${rawAlert.title}`,
+      type: rawAlert.severity.toUpperCase() + ' EVENT',
+      timeAgo: 'Just now',
+      timestamp: new Date(),
+      category: 'event',
+    };
+    setActivities((prev) => [freshActivity, ...prev]);
+    onShowToast(`Dispatched: "${rawAlert.title}" broadcasted successfully.`, 'success');
+  };
+
+  // Formatting scheduled reports
+  const handleScheduleReport = (rawRep: Omit<ReportData, 'id' | 'timestamp'>) => {
+    const freshRep: ReportData = {
+      ...rawRep,
+      id: `rep-${Date.now()}`,
+      timestamp: new Date(),
+    };
+    setReports((prev) => [freshRep, ...prev]);
+
+    // Prepend matching activity feed
+    const freshActivity: ActivityData = {
+      id: `act-${Date.now()}`,
+      title: `Report Compiled: "${rawRep.title}"`,
+      type: 'Archive Update',
+      timeAgo: 'Just now',
+      timestamp: new Date(),
+      category: 'update',
+    };
+    setActivities((prev) => [freshActivity, ...prev]);
+    onShowToast(`Scheduled: "${rawRep.title}" registered inside archive.`, 'success');
+  };
+
+  const handleDismissAlert = (id: string) => {
+    setAlerts((prev) => prev.filter((a) => a.id !== id));
+    onShowToast('Alert acknowledged and stored into secure logs.', 'info');
+  };
+
+  // Filter dynamic KPI statistics based on dropdown regional selectors
+  const activeKPIs = useMemo(() => {
+    return initialKPICards[selectedRegion] || initialKPICards['Global'];
+  }, [selectedRegion]);
+
+  // Global search filtering logic (filters Alerts, Events, or Reports dynamically)
+  const filteredAlerts = useMemo(() => {
+    if (!searchQuery) return alerts;
+    const q = searchQuery.toLowerCase();
+    return alerts.filter(
+      (a) => a.title.toLowerCase().includes(q) || a.description.toLowerCase().includes(q)
+    );
+  }, [alerts, searchQuery]);
+
+  const filteredActivities = useMemo(() => {
+    if (!searchQuery) return activities;
+    const q = searchQuery.toLowerCase();
+    return activities.filter((a) => a.title.toLowerCase().includes(q) || a.type.toLowerCase().includes(q));
+  }, [activities, searchQuery]);
+
+  const filteredReports = useMemo(() => {
+    if (!searchQuery) return reports;
+    const q = searchQuery.toLowerCase();
+    return reports.filter((r) => r.title.toLowerCase().includes(q) || r.category.toLowerCase().includes(q));
+  }, [reports, searchQuery]);
+
   return (
-    <div className="min-h-screen w-full bg-[#070b14] flex flex-col font-sans text-gray-200 relative select-none">
-      {/* Background ambient light effects */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#00e0a5]/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#0ea5e9]/5 rounded-full blur-[120px] pointer-events-none" />
+    <div className="flex bg-[#070b14] text-gray-100 min-h-screen font-sans antialiased overflow-x-hidden selection:bg-brand-cyan selection:text-black">
+      
+      {/* 1. SIDEBAR NAVIGATION PANEL */}
+      <Sidebar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        unreadAlertsCount={unreadAlertsCount}
+        onSignOut={onSignOut}
+      />
 
-      {/* Header */}
-      <header className="h-16 border-b border-[#1e293b]/40 bg-[#111625]/80 backdrop-blur-md flex items-center justify-between px-8 z-10 shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-lg bg-[#00e0a5]/10 border border-[#00e0a5]/25 flex items-center justify-center text-brand-cyan shadow-[0_0_15px_rgba(0,224,165,0.1)] relative overflow-hidden">
-            <Shield size={18} className="text-brand-cyan" />
-          </div>
-          <div>
-            <h1 className="text-lg font-extrabold tracking-wider text-white font-display">
-              ECON-SENTINEL
-            </h1>
-            <p className="text-[8px] text-gray-500 font-mono tracking-[0.25em] uppercase">
-              Surveillance Desk
-            </p>
-          </div>
-        </div>
+      {/* MAIN CONTAINER */}
+      <div className="flex-1 flex flex-col min-h-screen overflow-y-auto">
+        
+        {/* 2. TOPBAR CONTAINER */}
+        <Topbar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          onQuickActionClick={() => openActionForm('createAlert')}
+          alertsCount={unreadAlertsCount}
+          onSearchClick={() => setIsSearchOverlayOpen(true)}
+        />
 
-        <div className="flex items-center gap-4">
-          <div className="flex flex-col text-right">
-            <span className="text-xs font-semibold text-white">{userEmail}</span>
-            <span className="text-[9px] font-mono text-brand-cyan tracking-wider">LEVEL_1_ANALYST</span>
-          </div>
-          <button
-            onClick={handleSignOutClick}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 hover:border-red-500/50 rounded-lg text-xs font-bold text-red-400 transition-all cursor-pointer"
-          >
-            <LogOut size={13} />
-            <span>Sign Out</span>
-          </button>
-        </div>
-      </header>
+        {/* 3. CORE ROUTE CONDITIONAL CONTENT VIEWPORT */}
+        <main className="flex-1 p-8">
+          
+          {activeTab === 'Dashboard' && (
+            <div className="animate-in fade-in duration-200">
+              
+              {/* BREADCRUMB + PAGE HEADER BLOCK */}
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 text-left">
+                <div>
+                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider mb-1.5 select-none">
+                    <span className="text-gray-500">Home</span>
+                    <span className="text-gray-700">/</span>
+                    <span className="text-brand-cyan">Dashboard</span>
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white font-display">
+                    Executive Intelligence Overview
+                  </h2>
+                </div>
 
-      {/* Main Content */}
-      <main className="flex-1 p-8 z-10 overflow-y-auto max-w-7xl mx-auto w-full flex flex-col gap-8 text-left">
-        {/* Page title */}
-        <div>
-          <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider mb-1.5">
-            <span className="text-gray-500">Home</span>
-            <span className="text-gray-700">/</span>
-            <span className="text-brand-cyan">Dashboard</span>
-          </div>
-          <h2 className="text-3xl font-extrabold tracking-tight text-white font-display">
-            Economic Impact Analytics Dashboard
-          </h2>
-          <p className="text-sm text-gray-400 mt-1 max-w-2xl">
-            Real-time geopolitical and macroeconomic modeling. Monitor high-risk conflict zones, supply chain channels, and global inflation anomalies.
-          </p>
-        </div>
+                {/* Dropdown Filters on right matching the layout */}
+                <div className="flex items-center gap-3 self-end md:self-auto select-none" id="dashboard-hud-filters">
+                  {/* Calendar Duration Dropdown */}
+                  <div className="relative">
+                    <select
+                      id="filter-time-range"
+                      value={timeRange}
+                      onChange={(e) => {
+                        setTimeRange(e.target.value);
+                        onShowToast(`Calibrating econometric indexes for: ${e.target.value}`, 'info');
+                      }}
+                      className="appearance-none bg-[#121829] border border-[#1e293b]/70 hover:border-gray-600 rounded px-4 py-1.5 pr-8 text-xs font-medium text-gray-300 font-sans focus:outline-none cursor-pointer"
+                    >
+                      <option value="Last 24 Hours">Last 24 Hours</option>
+                      <option value="Last 7 Days">Last 7 Days</option>
+                      <option value="Last 30 Days">Last 30 Days</option>
+                      <option value="Last 90 Days">Last 90 Days</option>
+                      <option value="Year-to-date (YTD)">Year-to-date (YTD)</option>
+                    </select>
+                    <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+                  </div>
 
-        {/* Dynamic Telemetry Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Card 1: GDP Fluctuation Index */}
-          <div className="bg-[#111625] border border-[#1e293b]/70 rounded-xl p-6 shadow-xl flex flex-col gap-4 relative overflow-hidden">
-            <div className="absolute top-0 right-0 h-16 w-16 bg-brand-cyan/5 rounded-bl-full blur-[10px] pointer-events-none" />
-            <div className="flex justify-between items-start">
-              <div className="p-2.5 bg-brand-cyan/10 border border-brand-cyan/20 rounded-lg text-brand-cyan">
-                <TrendingUp size={18} />
+                  {/* Geopolitical Region Filter Dropdown */}
+                  <div className="relative">
+                    <select
+                      id="filter-region"
+                      value={selectedRegion}
+                      onChange={(e) => {
+                        setSelectedRegion(e.target.value);
+                        onShowToast(`Switching surveillance quadrant to: ${e.target.value}`, 'info');
+                      }}
+                      className="appearance-none bg-[#121829] border border-[#1e293b]/70 hover:border-gray-600 rounded px-4 py-1.5 pr-8 text-xs font-medium text-gray-300 font-sans focus:outline-none cursor-pointer"
+                    >
+                      <option value="Global">Global</option>
+                      <option value="G7">G7 Group</option>
+                      <option value="Asia-Pacific">Asia-Pacific</option>
+                      <option value="Developing Nations">Developing Nations</option>
+                    </select>
+                    <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+                  </div>
+
+                  {/* Export Report Action Button */}
+                  <button
+                    id="btn-export-report"
+                    onClick={() => {
+                      onShowToast('Formatting PDF dispatch... Downloading ECON-SENTINEL report.', 'success');
+                      alert('Macroeconomic surveillance summary printed successfully.');
+                    }}
+                    className="flex items-center gap-1.5 px-4 py-1.5 bg-[#121829] border border-brand-cyan/25 hover:border-brand-cyan/60 rounded text-xs font-medium text-brand-cyan hover:bg-[#1a2e3b]/30 transition-all cursor-pointer"
+                  >
+                    <FileDown size={14} />
+                    <span>Export Report</span>
+                  </button>
+                </div>
               </div>
-              <span className="text-[10px] font-mono font-bold text-brand-cyan bg-brand-cyan/10 px-2 py-0.5 rounded border border-brand-cyan/20">
-                ACTIVE_SCAN
-              </span>
-            </div>
-            <div>
-              <p className="text-2xl font-extrabold text-white font-display">-$412.5B</p>
-              <p className="text-xs text-gray-400 font-sans mt-0.5">Projected Global GDP Variance</p>
-            </div>
-            <div className="border-t border-[#1e293b]/50 pt-3 text-[10px] font-mono text-gray-500 flex justify-between">
-              <span>QUADRANT: WEST_EUR</span>
-              <span className="text-red-400 font-semibold">-3.2% Trend</span>
-            </div>
-          </div>
 
-          {/* Card 2: Supply Chain Disruption Index */}
-          <div className="bg-[#111625] border border-[#1e293b]/70 rounded-xl p-6 shadow-xl flex flex-col gap-4 relative overflow-hidden">
-            <div className="absolute top-0 right-0 h-16 w-16 bg-[#0ea5e9]/5 rounded-bl-full blur-[10px] pointer-events-none" />
-            <div className="flex justify-between items-start">
-              <div className="p-2.5 bg-[#0ea5e9]/10 border border-[#0ea5e9]/20 rounded-lg text-[#0ea5e9]">
-                <Globe size={18} />
+              {/* 4. STATISTICS CARDS GRID */}
+              <KPICards cards={activeKPIs} />
+
+              {/* 5. CENTER DISPLAY BLOCKS 2-COLUMN PANELS */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                
+                {/* Global Economic Health Summary (Grid Columns spans 2) */}
+                <div className="lg:col-span-2">
+                  <HealthSummary />
+                </div>
+
+                {/* Alert Intelligence (Grid Column spans 1) */}
+                <div className="lg:col-span-1">
+                  <AlertIntelligence
+                    alerts={filteredAlerts}
+                    onDismissAlert={handleDismissAlert}
+                    onViewAllAlertsClick={() => {
+                      onShowToast('Expanded full intelligence alerts databank.', 'success');
+                    }}
+                  />
+                </div>
               </div>
-              <span className="text-[10px] font-mono font-bold text-[#0ea5e9] bg-[#0ea5e9]/10 px-2 py-0.5 rounded border border-[#0ea5e9]/20">
-                MARITIME_SEC
-              </span>
+
+              {/* 6. BOTTOM TELEMETRY BLOCKS (3-COLUMN PANELS) */}
+              <DashboardBottomRow
+                activities={filteredActivities}
+                reports={filteredReports}
+                onCreateAlertClick={() => openActionForm('createAlert')}
+                onScheduleReportClick={() => openActionForm('scheduleReport')}
+                onInviteUserClick={() => openActionForm('inviteUser')}
+              />
             </div>
-            <div>
-              <p className="text-2xl font-extrabold text-white font-display">84.2 pts</p>
-              <p className="text-xs text-gray-400 font-sans mt-0.5">Supply Disruption Index</p>
-            </div>
-            <div className="border-t border-[#1e293b]/50 pt-3 text-[10px] font-mono text-gray-500 flex justify-between">
-              <span>QUADRANT: SUEZ_CANAL</span>
-              <span className="text-orange-400 font-semibold">+18.4 pts</span>
-            </div>
+          )}
+
+          {/* TAB 2: REGIONAL Surveillance Quadrants */}
+          {activeTab === 'Regional' && (
+            <RegionalIntelligence onShowToast={onShowToast} />
+          )}
+
+          {/* TAB 3: INDICATORS Custom Calibration */}
+          {activeTab === 'Indicators' && (
+            <IndicatorsIndex onShowToast={onShowToast} />
+          )}
+
+          {/* TAB 4: CONFLICT Risk Flashpoints */}
+          {activeTab === 'Conflict' && (
+            <ConflictAnalytics onShowToast={onShowToast} />
+          )}
+
+          {/* TAB 5: TRADE Maritime Channels */}
+          {activeTab === 'Trade' && (
+            <GlobalTradeIntelligence onShowToast={onShowToast} />
+          )}
+
+          {/* TAB 5.5: MANAGEMENT Enterprise User Administration */}
+          {activeTab === 'Management' && (
+            <UserAdministration onShowToast={onShowToast} />
+          )}
+
+          {/* TAB 6: REPORTS Library Database */}
+          {activeTab === 'Reports' && (
+            <IntelligenceReports onShowToast={onShowToast} />
+          )}
+
+          {/* TAB 6.5: NOTIFICATIONS Hub */}
+          {activeTab === 'Notifications' && (
+            <NotificationHub onShowToast={onShowToast} />
+          )}
+
+          {/* TAB 7: SETTINGS Command Console */}
+          {activeTab === 'Settings' && (
+            <PlatformConfiguration onShowToast={onShowToast} />
+          )}
+
+        </main>
+
+        {/* HUD FOOTER STATUS BAR */}
+        <footer className="h-10 border-t border-[#1e293b]/40 bg-[#070b14] flex items-center justify-between px-8 text-[9px] font-mono text-gray-500 select-none shrink-0 text-left">
+          <div className="flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand-cyan animate-pulse"></span>
+            <span>ECON-SENTINEL NODE SERVER v4.16.8 // REGION_G7 DIRECT CONNECTED</span>
           </div>
 
-          {/* Card 3: Inflation Risk Assessment */}
-          <div className="bg-[#111625] border border-[#1e293b]/70 rounded-xl p-6 shadow-xl flex flex-col gap-4 relative overflow-hidden">
-            <div className="absolute top-0 right-0 h-16 w-16 bg-red-500/5 rounded-bl-full blur-[10px] pointer-events-none" />
-            <div className="flex justify-between items-start">
-              <div className="p-2.5 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400">
-                <AlertTriangle size={18} />
-              </div>
-              <span className="text-[10px] font-mono font-bold text-red-400 bg-red-500/10 px-2 py-0.5 rounded border border-red-500/20 animate-pulse">
-                HIGH_ALERT
-              </span>
-            </div>
-            <div>
-              <p className="text-2xl font-extrabold text-white font-display">7.84% Avg</p>
-              <p className="text-xs text-gray-400 font-sans mt-0.5">Global Commodity Inflation Rate</p>
-            </div>
-            <div className="border-t border-[#1e293b]/50 pt-3 text-[10px] font-mono text-gray-500 flex justify-between">
-              <span>SYSTEM: EXOGENOUS_CPI</span>
-              <span className="text-red-400 font-semibold">Critical Spike</span>
-            </div>
+          <div className="hidden sm:flex items-center gap-6">
+            <span>PING: 14.5 ms</span>
+            <span>CRYP_DISPATCH: HIGH_SECURE_MODE</span>
+            <span>SECURE JWT ACTIVE</span>
           </div>
-        </div>
+        </footer>
 
-        {/* Database & Platform Overview Segment */}
-        <div className="bg-[#111625] border border-[#1e293b]/70 rounded-xl p-8 shadow-xl flex flex-col gap-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-brand-cyan/10 border border-brand-cyan/20 rounded text-brand-cyan">
-              <Database size={16} />
-            </div>
-            <h3 className="text-md font-bold text-white font-mono uppercase tracking-wide">
-              INTELLIGENCE REGISTRY DIRECTORY
-            </h3>
-          </div>
-          <p className="text-xs text-gray-400 font-sans leading-relaxed">
-            The dataset includes secure telemetry logs, microeconomic inflation matrices, and G7 financial bulletins. 
-            All analytical scripts running on this host are isolated and authenticated via JSON Web Tokens. Accessing other modules requires higher clearance.
-          </p>
-          <div className="p-4 bg-[#070b14] border border-[#1e293b]/55 rounded-lg font-mono text-[11px] text-gray-400 flex flex-col gap-2">
-            <div className="flex justify-between border-b border-[#1e293b]/30 pb-2">
-              <span className="text-brand-cyan">NODE_ID: SENTINEL_A7</span>
-              <span>Uptime: 100% // Stable</span>
-            </div>
-            <div className="flex justify-between">
-              <span>AUTHENTICATED AS: {userEmail.toUpperCase()}</span>
-              <span className="text-brand-cyan">ROUTING: ROUTES-ENABLED (NO_HASH_LINKS)</span>
-            </div>
-          </div>
-        </div>
-      </main>
+      </div>
 
-      {/* Footer */}
-      <footer className="h-10 border-t border-[#1e293b]/40 bg-[#070b14] flex items-center justify-between px-8 text-[9px] font-mono text-gray-500 shrink-0">
-        <div className="flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-brand-cyan animate-pulse"></span>
-          <span>ECON-SENTINEL FRONTEND SERVER v1.0.0</span>
-        </div>
-        <div>
-          <span>SECURE ROUTING ENGINE ACTIVE</span>
-        </div>
-      </footer>
+      {/* 7. SYSTEM ACTION INPUT POPUPS */}
+      <FormsModal
+        isOpen={isModalOpen}
+        type={modalType}
+        onClose={() => {
+          setIsModalOpen(false);
+          setModalType(null);
+        }}
+        onSubmitAlert={handleAddNewAlert}
+        onSubmitReport={handleScheduleReport}
+      />
+
+      {/* 8. COMMAND SEARCH PALETTE OVERLAY */}
+      <SearchOverlay
+        isOpen={isSearchOverlayOpen}
+        onClose={() => setIsSearchOverlayOpen(false)}
+        onShowToast={onShowToast}
+        onNavigateToTab={(tab) => {
+          setActiveTab(tab);
+        }}
+      />
+
     </div>
   );
 }

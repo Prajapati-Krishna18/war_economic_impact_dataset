@@ -12,7 +12,9 @@ import {
   X,
   CheckCircle,
   LogIn,
-  Key
+  Key,
+  Globe,
+  Database
 } from 'lucide-react';
 
 interface SignInProps {
@@ -47,7 +49,7 @@ export default function SignIn({ onSignIn, showLogoutBanner, onCloseBanner, onSh
       return;
     }
     if (!password) {
-      setErrorMsg('Institutional passwords must not be blank.');
+      setErrorMsg('Institutional passwords must not be bank.');
       return;
     }
     if (password.length < 4) {
@@ -84,7 +86,7 @@ export default function SignIn({ onSignIn, showLogoutBanner, onCloseBanner, onSh
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#070b14] flex flex-col items-center justify-center p-4 relative font-sans overflow-x-hidden selection:bg-brand-cyan selection:text-black select-none text-gray-200">
+    <div className="min-h-screen w-full bg-[#070b14] flex flex-col items-center justify-center p-4 relative font-sans overflow-x-hidden selection:bg-brand-cyan selection:text-black select-none">
       
       {/* Background ambient light effects */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#00e0a5]/5 rounded-full blur-[100px] pointer-events-none" />
@@ -105,7 +107,7 @@ export default function SignIn({ onSignIn, showLogoutBanner, onCloseBanner, onSh
             </div>
             <button
               onClick={onCloseBanner}
-              className="text-brand-cyan/60 hover:text-white transition duration-150 cursor-pointer p-0.5 rounded hover:bg-[#00e0a5]/10 border-0 bg-transparent"
+              className="text-brand-cyan/60 hover:text-white transition duration-150 cursor-pointer p-0.5 rounded hover:bg-[#00e0a5]/10"
               title="Close Notification"
             >
               <X size={14} />
@@ -152,7 +154,7 @@ export default function SignIn({ onSignIn, showLogoutBanner, onCloseBanner, onSh
             </div>
           )}
 
-          <form onSubmit={handleLocalSignIn} className="space-y-4 text-left">
+          <form onSubmit={handleLocalSignIn} className="space-y-4.5 text-left">
             
             {/* EMAIL OR USERNAME FIELD */}
             <div className="space-y-1.5">
@@ -183,7 +185,7 @@ export default function SignIn({ onSignIn, showLogoutBanner, onCloseBanner, onSh
                 <button
                   type="button"
                   onClick={() => setShowResetModal(true)}
-                  className="text-[9.5px] font-mono font-bold text-brand-cyan hover:underline hover:text-white transition cursor-pointer border-0 bg-transparent"
+                  className="text-[9.5px] font-mono font-bold text-brand-cyan hover:underline hover:text-white transition cursor-pointer"
                 >
                   Forgot Password?
                 </button>
@@ -205,7 +207,7 @@ export default function SignIn({ onSignIn, showLogoutBanner, onCloseBanner, onSh
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition cursor-pointer p-1 rounded border-0 bg-transparent"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition cursor-pointer p-1 rounded"
                 >
                   {showPassword ? <EyeOff size={13} /> : <Eye size={13} />}
                 </button>
@@ -230,7 +232,7 @@ export default function SignIn({ onSignIn, showLogoutBanner, onCloseBanner, onSh
             <div className="pt-2">
               <button
                 type="submit"
-                className="w-full py-3 bg-[#00e0a5] hover:bg-[#3df2d1] hover:shadow-[0_0_15px_rgba(0,224,165,0.3)] text-[#070b14] font-extrabold rounded-xl text-xs font-sans transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2 border-0"
+                className="w-full py-3 bg-[#00e0a5] hover:bg-[#3df2d1] hover:shadow-[0_0_15px_rgba(0,224,165,0.3)] text-[#070b14] font-extrabold rounded-xl text-xs font-sans transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
                 id="btn-auth-signin"
               >
                 <span>SIGN IN</span>
@@ -354,13 +356,13 @@ export default function SignIn({ onSignIn, showLogoutBanner, onCloseBanner, onSh
                 <button
                   type="button"
                   onClick={() => setShowSignUpModal(false)}
-                  className="px-4 py-2 border border-[#1e293b] hover:border-gray-500 rounded text-gray-300 font-semibold transition cursor-pointer bg-transparent"
+                  className="px-4 py-2 border border-[#1e293b] hover:border-gray-500 rounded text-gray-300 font-semibold transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-brand-cyan text-[#070b14] font-bold rounded transition cursor-pointer border-0"
+                  className="px-4 py-2 bg-brand-cyan text-[#070b14] font-bold rounded transition cursor-pointer"
                 >
                   Submit Agency Request
                 </button>
@@ -404,13 +406,13 @@ export default function SignIn({ onSignIn, showLogoutBanner, onCloseBanner, onSh
                 <button
                   type="button"
                   onClick={() => setShowResetModal(false)}
-                  className="px-4 py-2 border border-[#1e293b] hover:border-gray-500 rounded text-gray-300 font-semibold transition cursor-pointer bg-transparent"
+                  className="px-4 py-2 border border-[#1e293b] hover:border-gray-500 rounded text-gray-300 font-semibold transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-brand-cyan text-[#070b14] font-bold rounded transition cursor-pointer border-0"
+                  className="px-4 py-2 bg-brand-cyan text-[#070b14] font-bold rounded transition cursor-pointer"
                 >
                   Send Cypher Reset
                 </button>
