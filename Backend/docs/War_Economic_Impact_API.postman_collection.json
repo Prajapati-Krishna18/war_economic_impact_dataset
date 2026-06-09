@@ -15,13 +15,18 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/health",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/health",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "health"
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Returns the system health, database connection state, and server uptime."
           },
@@ -33,13 +38,18 @@
             "method": "HEAD",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/health",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/health",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "health"
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Get health status headers without the response body."
           },
@@ -51,13 +61,18 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/version",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/version",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "version"
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Returns API build version details."
           },
@@ -97,14 +112,19 @@
               "raw": "{\n  \"name\": \"Test Researcher\",\n  \"email\": \"researcher@test.com\",\n  \"password\": \"SecurePassword123\",\n  \"role\": \"researcher\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/auth/register",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/auth/register",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "auth",
                 "register"
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Register a new user account. Returns a JWT token."
           },
@@ -139,14 +159,19 @@
               "raw": "{\n  \"email\": \"researcher@test.com\",\n  \"password\": \"SecurePassword123\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/auth/login",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/auth/login",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "auth",
                 "login"
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Authenticate user and receive a JWT token."
           },
@@ -163,14 +188,19 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/auth/me",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/auth/me",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "auth",
                 "me"
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Returns the profile of the currently authenticated user."
           },
@@ -187,14 +217,19 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/auth/logout",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/auth/logout",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "auth",
                 "logout"
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Logs out user and clears cookie sessions."
           },
@@ -215,14 +250,19 @@
               "raw": "{\n  \"email\": \"researcher@test.com\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/auth/forgotpassword",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/auth/forgot-password",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "auth",
-                "forgotpassword"
-              ]
+                "forgot-password"
+              ],
+              "protocol": "https"
             },
             "description": "Generates a reset token and returns it in the payload (dev mode fallback)."
           },
@@ -231,7 +271,7 @@
         {
           "name": "Reset Password",
           "request": {
-            "method": "PUT",
+            "method": "POST",
             "header": [
               {
                 "key": "Content-Type",
@@ -240,24 +280,22 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"password\": \"NewSecurePassword123\"\n}"
+              "raw": "{\n  \"token\": \"PASTE_RESET_TOKEN_HERE\",\n  \"password\": \"NewSecurePassword123\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/auth/resetpassword/:resettoken",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/auth/reset-password",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "auth",
-                "resetpassword",
-                ":resettoken"
+                "reset-password"
               ],
-              "variable": [
-                {
-                  "key": "resettoken",
-                  "value": "PASTE_RESET_TOKEN_HERE"
-                }
-              ]
+              "protocol": "https"
             },
             "description": "Resets the user's password using the generated token."
           },
@@ -274,14 +312,19 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/auth/refresh-token",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/auth/refresh-token",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "auth",
                 "refresh-token"
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Returns a brand new valid JWT token if the current token has not expired."
           },
@@ -298,14 +341,19 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/auth/delete-account",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/auth/delete-account",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "auth",
                 "delete-account"
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Permits authenticated users to delete their own account."
           },
@@ -322,11 +370,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts?page=1&limit=10&region=Middle East&sort=-startYear",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts?page=1&limit=10&region=Middle East&sort=-startYear",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts"
               ],
               "query": [
@@ -346,7 +398,8 @@
                   "key": "sort",
                   "value": "-startYear"
                 }
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Fetches a paginated list of all conflicts. Supports multi-field dynamic filtering, sorting, paginations, and full-text keyword searches."
           },
@@ -371,13 +424,18 @@
               "raw": "{\n  \"conflictName\": \"Suez Crisis\",\n  \"type\": \"Interstate\",\n  \"region\": \"Middle East\",\n  \"country\": \"Egypt\",\n  \"startYear\": 1956,\n  \"endYear\": 1957,\n  \"status\": \"Resolved\",\n  \"inflationRate\": 12.5,\n  \"gdpChange\": -4.2,\n  \"costOfWar\": 500000000,\n  \"primaryAffectedSector\": \"Trade & Logistics\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/conflicts",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts"
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Creates a new conflict entry. Requires 'Admin' or 'Researcher' authentication."
           },
@@ -389,11 +447,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/:conflictId",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/:conflictId",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 ":conflictId"
               ],
@@ -402,7 +464,8 @@
                   "key": "conflictId",
                   "value": "ENTER_MONGO_ID_HERE"
                 }
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Fetch a single conflict record by its exact MongoDB ObjectId."
           },
@@ -427,11 +490,15 @@
               "raw": "{\n  \"conflictName\": \"Updated Vietnam War\",\n  \"type\": \"Cold War\",\n  \"region\": \"Southeast Asia\",\n  \"country\": \"Vietnam\",\n  \"startYear\": 1955,\n  \"endYear\": 1975,\n  \"status\": \"Resolved\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/conflicts/:conflictId",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/:conflictId",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 ":conflictId"
               ],
@@ -440,7 +507,8 @@
                   "key": "conflictId",
                   "value": "ENTER_MONGO_ID_HERE"
                 }
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Replaces all data fields of an existing conflict entry."
           },
@@ -465,11 +533,15 @@
               "raw": "{\n  \"inflationRate\": 14.8\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/conflicts/:conflictId",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/:conflictId",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 ":conflictId"
               ],
@@ -478,7 +550,8 @@
                   "key": "conflictId",
                   "value": "ENTER_MONGO_ID_HERE"
                 }
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Partially updates details of an existing conflict."
           },
@@ -495,11 +568,15 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/:conflictId",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/:conflictId",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 ":conflictId"
               ],
@@ -508,7 +585,8 @@
                   "key": "conflictId",
                   "value": "ENTER_MONGO_ID_HERE"
                 }
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Flags a conflict as soft-deleted. Requires Admin privileges."
           },
@@ -525,11 +603,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/name/:name",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/name/:name",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "name",
                 ":name"
@@ -539,7 +621,8 @@
                   "key": "name",
                   "value": "World War II"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -550,11 +633,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/type/:type",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/type/:type",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "type",
                 ":type"
@@ -564,7 +651,8 @@
                   "key": "type",
                   "value": "Interstate"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -575,11 +663,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/type/:type/count",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/type/:type/count",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "type",
                 ":type",
@@ -590,7 +682,8 @@
                   "key": "type",
                   "value": "Interstate"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -601,11 +694,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/region/:region",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/region/:region",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "region",
                 ":region"
@@ -615,7 +712,8 @@
                   "key": "region",
                   "value": "Europe"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -626,11 +724,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/region/:region/latest",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/region/:region/latest",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "region",
                 ":region",
@@ -641,7 +743,8 @@
                   "key": "region",
                   "value": "Europe"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -652,11 +755,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/region/:region/oldest",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/region/:region/oldest",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "region",
                 ":region",
@@ -667,7 +774,8 @@
                   "key": "region",
                   "value": "Europe"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -678,11 +786,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/status/:status",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/status/:status",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "status",
                 ":status"
@@ -692,7 +804,8 @@
                   "key": "status",
                   "value": "Ongoing"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -703,11 +816,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/status/:status/count",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/status/:status/count",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "status",
                 ":status",
@@ -718,7 +835,8 @@
                   "key": "status",
                   "value": "Ongoing"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -729,11 +847,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/country/:country",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/country/:country",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "country",
                 ":country"
@@ -743,7 +865,8 @@
                   "key": "country",
                   "value": "Vietnam"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -754,11 +877,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/country/:country/history",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/country/:country/history",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "country",
                 ":country",
@@ -769,7 +896,8 @@
                   "key": "country",
                   "value": "Vietnam"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -780,11 +908,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/start-year/:year",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/start-year/:year",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "start-year",
                 ":year"
@@ -794,7 +926,8 @@
                   "key": "year",
                   "value": "2022"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -805,11 +938,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/end-year/:year",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/end-year/:year",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "end-year",
                 ":year"
@@ -819,7 +956,8 @@
                   "key": "year",
                   "value": "1975"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -830,11 +968,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/year/:year",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/year/:year",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "year",
                 ":year"
@@ -844,7 +986,8 @@
                   "key": "year",
                   "value": "1968"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -855,11 +998,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/inflation/:rate",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/inflation/:rate",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "inflation",
                 ":rate"
@@ -869,7 +1016,8 @@
                   "key": "rate",
                   "value": "15"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -880,11 +1028,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/gdp-loss/:percentage",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/gdp-loss/:percentage",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "gdp-loss",
                 ":percentage"
@@ -894,7 +1046,8 @@
                   "key": "percentage",
                   "value": "5"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -905,11 +1058,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/poverty/:rate",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/poverty/:rate",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "poverty",
                 ":rate"
@@ -919,7 +1076,8 @@
                   "key": "rate",
                   "value": "40"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -930,11 +1088,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/extreme-poverty/:rate",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/extreme-poverty/:rate",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "extreme-poverty",
                 ":rate"
@@ -944,7 +1106,8 @@
                   "key": "rate",
                   "value": "20"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -955,11 +1118,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/food-insecurity/:rate",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/food-insecurity/:rate",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "food-insecurity",
                 ":rate"
@@ -969,7 +1136,8 @@
                   "key": "rate",
                   "value": "30"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -980,11 +1148,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/unemployment/:rate",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/unemployment/:rate",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "unemployment",
                 ":rate"
@@ -994,7 +1166,8 @@
                   "key": "rate",
                   "value": "25"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1005,11 +1178,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/youth-unemployment/:rate",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/youth-unemployment/:rate",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "youth-unemployment",
                 ":rate"
@@ -1019,7 +1196,8 @@
                   "key": "rate",
                   "value": "30"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1030,11 +1208,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/sector/:sector",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/sector/:sector",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "sector",
                 ":sector"
@@ -1044,7 +1226,8 @@
                   "key": "sector",
                   "value": "Agriculture"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1055,11 +1238,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/sector/:sector/highest-gdp-loss",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/sector/:sector/highest-gdp-loss",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "sector",
                 ":sector",
@@ -1070,7 +1257,8 @@
                   "key": "sector",
                   "value": "Agriculture"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1081,11 +1269,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/sector/:sector/highest-inflation",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/sector/:sector/highest-inflation",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "sector",
                 ":sector",
@@ -1096,7 +1288,8 @@
                   "key": "sector",
                   "value": "Agriculture"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1107,11 +1300,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/black-market/:level",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/black-market/:level",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "black-market",
                 ":level"
@@ -1121,7 +1318,8 @@
                   "key": "level",
                   "value": "High"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1132,11 +1330,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/black-market-goods/:goods",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/black-market-goods/:goods",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "black-market-goods",
                 ":goods"
@@ -1146,7 +1348,8 @@
                   "key": "goods",
                   "value": "Fuel"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1157,11 +1360,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/profiteering/:status",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/profiteering/:status",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "profiteering",
                 ":status"
@@ -1171,7 +1378,8 @@
                   "key": "status",
                   "value": "Yes"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1182,11 +1390,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/currency-gap/:gap",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/currency-gap/:gap",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "currency-gap",
                 ":gap"
@@ -1196,7 +1408,8 @@
                   "key": "gap",
                   "value": "20"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1207,11 +1420,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/reconstruction-cost/:amount",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/reconstruction-cost/:amount",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "reconstruction-cost",
                 ":amount"
@@ -1221,7 +1438,8 @@
                   "key": "amount",
                   "value": "1000000000"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1232,11 +1450,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/cost-of-war/:amount",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/cost-of-war/:amount",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "cost-of-war",
                 ":amount"
@@ -1246,7 +1468,8 @@
                   "key": "amount",
                   "value": "5000000000"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1257,11 +1480,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/informal-economy/pre/:value",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/informal-economy/pre/:value",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "informal-economy",
                 "pre",
@@ -1272,7 +1499,8 @@
                   "key": "value",
                   "value": "20"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1283,11 +1511,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/informal-economy/during/:value",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/informal-economy/during/:value",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "informal-economy",
                 "during",
@@ -1298,7 +1530,8 @@
                   "key": "value",
                   "value": "35"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1309,11 +1542,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/households/:count",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/households/:count",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "households",
                 ":count"
@@ -1323,7 +1560,8 @@
                   "key": "count",
                   "value": "50000"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1339,11 +1577,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/war/:name/summary",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/war/:name/summary",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "war",
                 ":name",
@@ -1354,7 +1596,8 @@
                   "key": "name",
                   "value": "Vietnam War"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1365,11 +1608,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/war/:name/economic-impact",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/war/:name/economic-impact",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "war",
                 ":name",
@@ -1380,7 +1627,8 @@
                   "key": "name",
                   "value": "Vietnam War"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1391,11 +1639,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/war/:name/poverty-impact",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/war/:name/poverty-impact",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "war",
                 ":name",
@@ -1406,7 +1658,8 @@
                   "key": "name",
                   "value": "Vietnam War"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1417,11 +1670,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/war/:name/black-market",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/war/:name/black-market",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "war",
                 ":name",
@@ -1432,7 +1689,8 @@
                   "key": "name",
                   "value": "Vietnam War"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1443,11 +1701,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/war/:name/reconstruction",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/war/:name/reconstruction",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "war",
                 ":name",
@@ -1458,7 +1720,8 @@
                   "key": "name",
                   "value": "Vietnam War"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1469,11 +1732,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/war/:name/currency-crisis",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/war/:name/currency-crisis",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "war",
                 ":name",
@@ -1484,7 +1751,8 @@
                   "key": "name",
                   "value": "Vietnam War"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1495,11 +1763,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/war/:name/unemployment",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/war/:name/unemployment",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "war",
                 ":name",
@@ -1510,7 +1782,8 @@
                   "key": "name",
                   "value": "Vietnam War"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1526,14 +1799,19 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/ongoing",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/ongoing",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "ongoing"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1544,14 +1822,19 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/resolved",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/resolved",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "resolved"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1562,11 +1845,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/recent?limit=5",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/recent?limit=5",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "recent"
               ],
@@ -1575,7 +1862,8 @@
                   "key": "limit",
                   "value": "5"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1586,11 +1874,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/latest?limit=5",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/latest?limit=5",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "latest"
               ],
@@ -1599,7 +1891,8 @@
                   "key": "limit",
                   "value": "5"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1610,11 +1903,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/random?size=3",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/random?size=3",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "random"
               ],
@@ -1623,7 +1920,8 @@
                   "key": "size",
                   "value": "3"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1634,14 +1932,19 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/trending",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/trending",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "trending"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1652,14 +1955,19 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/high-risk",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/high-risk",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "high-risk"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1670,14 +1978,19 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/economic-collapse",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/economic-collapse",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "economic-collapse"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1688,15 +2001,20 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/top/highest-inflation",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/top/highest-inflation",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "top",
                 "highest-inflation"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1707,15 +2025,20 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/top/highest-poverty",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/top/highest-poverty",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "top",
                 "highest-poverty"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1744,11 +2067,15 @@
               "raw": "{\n  \"status\": \"Resolved\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/conflicts/:conflictId/status",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/:conflictId/status",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 ":conflictId",
                 "status"
@@ -1758,7 +2085,8 @@
                   "key": "conflictId",
                   "value": "ENTER_MONGO_ID"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1782,11 +2110,15 @@
               "raw": "{\n  \"inflationRate\": 18.2\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/conflicts/:conflictId/inflation",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/:conflictId/inflation",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 ":conflictId",
                 "inflation"
@@ -1796,7 +2128,8 @@
                   "key": "conflictId",
                   "value": "ENTER_MONGO_ID"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1820,11 +2153,15 @@
               "raw": "{\n  \"gdpChange\": -6.5\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/conflicts/:conflictId/gdp",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/:conflictId/gdp",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 ":conflictId",
                 "gdp"
@@ -1834,7 +2171,8 @@
                   "key": "conflictId",
                   "value": "ENTER_MONGO_ID"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1858,11 +2196,15 @@
               "raw": "{\n  \"povertyRate\": 45.0,\n  \"extremePovertyRate\": 18.0\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/conflicts/:conflictId/poverty",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/:conflictId/poverty",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 ":conflictId",
                 "poverty"
@@ -1872,7 +2214,8 @@
                   "key": "conflictId",
                   "value": "ENTER_MONGO_ID"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1896,11 +2239,15 @@
               "raw": "{\n  \"duringWarUnemployment\": 24.5\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/conflicts/:conflictId/unemployment",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/:conflictId/unemployment",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 ":conflictId",
                 "unemployment"
@@ -1910,7 +2257,8 @@
                   "key": "conflictId",
                   "value": "ENTER_MONGO_ID"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1934,11 +2282,15 @@
               "raw": "{\n  \"primaryAffectedSector\": \"Infrastructure & Transport\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/conflicts/:conflictId/sector",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/:conflictId/sector",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 ":conflictId",
                 "sector"
@@ -1948,7 +2300,8 @@
                   "key": "conflictId",
                   "value": "ENTER_MONGO_ID"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -1964,11 +2317,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/compare?conflict1=Gulf War&conflict2=Iraq War",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/compare?conflict1=Gulf War&conflict2=Iraq War",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "compare"
               ],
               "query": [
@@ -1980,7 +2337,8 @@
                   "key": "conflict2",
                   "value": "Iraq War"
                 }
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Returns a detailed statistical side-by-side comparison of two active conflicts."
           },
@@ -1992,15 +2350,20 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/conflicts/summary/ai",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/conflicts/summary/ai",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "conflicts",
                 "summary",
                 "ai"
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Generates a comprehensive summary narrative of database metrics."
           },
@@ -2017,11 +2380,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/search?keyword=Vietnam",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/search?keyword=Vietnam",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "search"
               ],
               "query": [
@@ -2029,7 +2396,8 @@
                   "key": "keyword",
                   "value": "Vietnam"
                 }
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Perform full-text search across all indexed fields (names, regions, countries, etc.)"
           },
@@ -2041,11 +2409,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/search/conflicts?country=Vietnam&region=Southeast Asia",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/search/conflicts?country=Vietnam&region=Southeast Asia",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "search",
                 "conflicts"
               ],
@@ -2058,7 +2430,8 @@
                   "key": "region",
                   "value": "Southeast Asia"
                 }
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Filter conflicts using specific query-params."
           },
@@ -2070,11 +2443,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/search/economic?inflation=20&poverty=30",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/search/economic?inflation=20&poverty=30",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "search",
                 "economic"
               ],
@@ -2087,7 +2464,8 @@
                   "key": "poverty",
                   "value": "30"
                 }
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Search by minimum ranges of economic loss/impact."
           },
@@ -2099,11 +2477,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/search/sector?name=Agriculture",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/search/sector?name=Agriculture",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "search",
                 "sector"
               ],
@@ -2112,7 +2494,8 @@
                   "key": "name",
                   "value": "Agriculture"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2123,11 +2506,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/search/black-market?goods=Fuel",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/search/black-market?goods=Fuel",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "search",
                 "black-market"
               ],
@@ -2136,7 +2523,8 @@
                   "key": "goods",
                   "value": "Fuel"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2152,13 +2540,18 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/stats",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/stats",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "stats"
-              ]
+              ],
+              "protocol": "https"
             },
             "description": "Retrieves computed aggregated calculations for the entire dataset."
           },
@@ -2170,14 +2563,19 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/stats/total-conflicts",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/stats/total-conflicts",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "stats",
                 "total-conflicts"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2188,14 +2586,19 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/stats/ongoing-conflicts",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/stats/ongoing-conflicts",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "stats",
                 "ongoing-conflicts"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2206,14 +2609,19 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/stats/resolved-conflicts",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/stats/resolved-conflicts",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "stats",
                 "resolved-conflicts"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2224,14 +2632,19 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/stats/highest-inflation",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/stats/highest-inflation",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "stats",
                 "highest-inflation"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2242,14 +2655,19 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/stats/lowest-gdp",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/stats/lowest-gdp",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "stats",
                 "lowest-gdp"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2260,14 +2678,19 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/stats/highest-poverty",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/stats/highest-poverty",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "stats",
                 "highest-poverty"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2278,14 +2701,19 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/stats/highest-food-insecurity",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/stats/highest-food-insecurity",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "stats",
                 "highest-food-insecurity"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2296,14 +2724,19 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/stats/highest-currency-gap",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/stats/highest-currency-gap",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "stats",
                 "highest-currency-gap"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2314,14 +2747,19 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/stats/highest-war-cost",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/stats/highest-war-cost",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "stats",
                 "highest-war-cost"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2332,14 +2770,19 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/stats/highest-reconstruction-cost",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/stats/highest-reconstruction-cost",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "stats",
                 "highest-reconstruction-cost"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2360,14 +2803,19 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/admin/dashboard",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/admin/dashboard",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "admin",
                 "dashboard"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2383,14 +2831,19 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/admin/conflicts",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/admin/conflicts",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "admin",
                 "conflicts"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2414,14 +2867,19 @@
               "raw": "{\n  \"conflictName\": \"Admin Registered War\",\n  \"type\": \"Civil War\",\n  \"region\": \"Africa\",\n  \"country\": \"Sudan\",\n  \"startYear\": 2023\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/admin/conflicts",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/admin/conflicts",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "admin",
                 "conflicts"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2437,11 +2895,15 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/admin/conflicts/:conflictId",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/admin/conflicts/:conflictId",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "admin",
                 "conflicts",
                 ":conflictId"
@@ -2451,7 +2913,8 @@
                   "key": "conflictId",
                   "value": "ENTER_MONGO_ID"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2475,11 +2938,15 @@
               "raw": "{\n  \"status\": \"Resolved\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/admin/conflicts/:conflictId",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/admin/conflicts/:conflictId",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "admin",
                 "conflicts",
                 ":conflictId"
@@ -2489,7 +2956,8 @@
                   "key": "conflictId",
                   "value": "ENTER_MONGO_ID"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2510,14 +2978,19 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/jwt/generate-token",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/jwt/generate-token",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "jwt",
                 "generate-token"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2537,14 +3010,19 @@
               "raw": "{\n  \"token\": \"PASTE_JWT_TOKEN_HERE\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/jwt/verify-token",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/jwt/verify-token",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "jwt",
                 "verify-token"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2560,14 +3038,19 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/jwt/refresh-token",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/jwt/refresh-token",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "jwt",
                 "refresh-token"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2583,14 +3066,19 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/jwt/logout",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/jwt/logout",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "jwt",
                 "logout"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2606,14 +3094,19 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/jwt/profile",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/jwt/profile",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "jwt",
                 "profile"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2629,14 +3122,19 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/jwt/dashboard",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/jwt/dashboard",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "jwt",
                 "dashboard"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2652,14 +3150,19 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/jwt/admin",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/jwt/admin",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "jwt",
                 "admin"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2675,14 +3178,19 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/jwt/user",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/jwt/user",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "jwt",
                 "user"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2711,13 +3219,18 @@
               "raw": "{\n  \"country\": \"Syria\",\n  \"region\": \"Middle East\",\n  \"year\": 2015,\n  \"economicMetrics\": {\n    \"inflationRate\": 38.0,\n    \"gdpGrowth\": -10.5,\n    \"unemploymentRate\": 48.0\n  },\n  \"status\": \"crisis\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/datasets",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/datasets",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "datasets"
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2728,11 +3241,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/datasets?page=1&limit=10&region=Middle East",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/datasets?page=1&limit=10&region=Middle East",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "datasets"
               ],
               "query": [
@@ -2748,7 +3265,8 @@
                   "key": "region",
                   "value": "Middle East"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2759,11 +3277,15 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/datasets/analytics/regions?startYear=2000&endYear=2024",
+              "raw": "https://war-economic-impact-dataset.onrender.com/api/v1/datasets/analytics/regions?startYear=2000&endYear=2024",
               "host": [
-                "{{baseUrl}}"
+                "war-economic-impact-dataset",
+                "onrender",
+                "com"
               ],
               "path": [
+                "api",
+                "v1",
                 "datasets",
                 "analytics",
                 "regions"
@@ -2777,7 +3299,8 @@
                   "key": "endYear",
                   "value": "2024"
                 }
-              ]
+              ],
+              "protocol": "https"
             }
           },
           "response": []
@@ -2808,7 +3331,7 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:5000/api/v1",
+      "value": "https://war-economic-impact-dataset.onrender.com/api/v1",
       "type": "string"
     },
     {
