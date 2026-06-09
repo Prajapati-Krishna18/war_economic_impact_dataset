@@ -38,22 +38,42 @@ export default function ConflictAnalytics({ onShowToast }: ConflictAnalyticsProp
   const [globalTension, setGlobalTension] = useState<string>('7.8');
   
   useEffect(() => {
-    fetchOngoingConflicts().then(conflicts => {
-      if (conflicts && conflicts.length > 0) {
-        // Find the worst conflict by combination of inflation + negative GDP
-        const worst = conflicts.sort((a: any, b: any) => 
-          ((b.inflationRate || 0) - (b.gdpChange || 0)) - ((a.inflationRate || 0) - (a.gdpChange || 0))
-        )[0];
-        setWorstConflict(worst);
-      }
-    });
+    let isMounted = true;
+    let intervalId: ReturnType<typeof setInterval>;
 
-    fetchStats().then(stats => {
-      if (stats && stats.totalConflicts) {
-        const tensionScore = Math.min(10, 5 + (stats.ongoingConflicts * 0.1)).toFixed(1);
-        setGlobalTension(tensionScore);
+    const loadData = async () => {
+      try {
+        const [conflicts, stats] = await Promise.all([
+          fetchOngoingConflicts(),
+          fetchStats()
+        ]);
+        
+        if (!isMounted) return;
+
+        if (conflicts && conflicts.length > 0) {
+          // Find the worst conflict by combination of inflation + negative GDP
+          const worst = conflicts.sort((a: any, b: any) => 
+            ((b.inflationRate || 0) - (b.gdpChange || 0)) - ((a.inflationRate || 0) - (a.gdpChange || 0))
+          )[0];
+          setWorstConflict(worst);
+        }
+
+        if (stats && stats.totalConflicts) {
+          const tensionScore = Math.min(10, 5 + (stats.ongoingConflicts * 0.1)).toFixed(1);
+          setGlobalTension(tensionScore);
+        }
+      } catch (e) {
+        console.error("Error fetching conflict analytics:", e);
       }
-    });
+    };
+
+    loadData();
+    intervalId = setInterval(loadData, 5000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
   }, []);
 
   const handleExport = () => {

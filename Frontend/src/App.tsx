@@ -85,12 +85,18 @@ function Dashboard({ onSignOut, userEmail, onShowToast }: DashboardProps) {
   const [reports, setReports] = useState<ReportData[]>(initialReports);
   const [kpiCardsData, setKpiCardsData] = useState<Record<string, KPICardData[]>>(initialKPICards);
 
-  // Fetch Live Data on mount
+  // Fetch Live Data dynamically with polling
   useEffect(() => {
-    import('./services/api').then(({ fetchStats, fetchOngoingConflicts }) => {
-      // 1. Fetch Global Stats for KPI Cards
-      fetchStats().then(stats => {
-        if (stats) {
+    let isMounted = true;
+    let intervalId: ReturnType<typeof setInterval>;
+
+    const loadData = async () => {
+      try {
+        const { fetchStats, fetchOngoingConflicts } = await import('./services/api');
+        
+        // 1. Fetch Global Stats for KPI Cards
+        const stats = await fetchStats();
+        if (isMounted && stats) {
           setKpiCardsData(prev => {
             const newGlobal = [...prev.Global];
             
@@ -107,13 +113,12 @@ function Dashboard({ onSignOut, userEmail, onShowToast }: DashboardProps) {
             return { ...prev, Global: newGlobal };
           });
         }
-      });
 
-      // 2. Fetch Ongoing Conflicts for Alerts and Activities
-      fetchOngoingConflicts().then((conflicts: any[]) => {
-        if (conflicts && conflicts.length > 0) {
+        // 2. Fetch Ongoing Conflicts for Alerts and Activities
+        const conflicts = await fetchOngoingConflicts();
+        if (isMounted && conflicts && conflicts.length > 0) {
           // Map to Alerts
-          const liveAlerts: AlertData[] = conflicts.slice(0, 5).map(c => ({
+          const liveAlerts: AlertData[] = conflicts.slice(0, 5).map((c: any) => ({
             id: c._id,
             severity: c.inflationRate > 20 || c.gdpChange < -10 ? 'critical' : 'warning',
             title: `Ongoing Crisis: ${c.conflictName}`,
@@ -121,10 +126,14 @@ function Dashboard({ onSignOut, userEmail, onShowToast }: DashboardProps) {
             timeAgo: 'Live',
             timestamp: new Date()
           }));
-          setAlerts(liveAlerts);
+          
+          setAlerts(prevAlerts => {
+            const userAlerts = prevAlerts.filter(a => typeof a.id === 'string' && a.id.startsWith('alert-'));
+            return [...userAlerts, ...liveAlerts];
+          });
 
           // Map to Activities
-          const liveActivities: ActivityData[] = conflicts.slice(0, 6).map((c, index) => ({
+          const liveActivities: ActivityData[] = conflicts.slice(0, 6).map((c: any, index: number) => ({
             id: `act-${c._id}`,
             title: `${c.conflictName} continues to impact ${c.primaryAffectedSector || 'multiple sectors'}.`,
             type: 'Conflict Update',
@@ -132,10 +141,27 @@ function Dashboard({ onSignOut, userEmail, onShowToast }: DashboardProps) {
             timestamp: new Date(),
             category: 'event'
           }));
-          setActivities(liveActivities);
+          
+          setActivities(prevActivities => {
+            const userActivities = prevActivities.filter(a => typeof a.id === 'string' && !a.id.match(/^act-[a-f0-9]{24}$/));
+            return [...userActivities, ...liveActivities];
+          });
         }
-      });
-    });
+      } catch (err) {
+        console.error("Error polling data:", err);
+      }
+    };
+
+    // Initial load
+    loadData();
+
+    // Poll every 5 seconds
+    intervalId = setInterval(loadData, 5000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
   }, []);
 
   // Popups & Command Modals
