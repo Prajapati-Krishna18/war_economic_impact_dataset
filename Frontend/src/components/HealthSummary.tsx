@@ -3,9 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
-import { heatmapCells, mockLineChartData } from '../mockData';
+import React, { useState, useEffect } from 'react';
+import { heatmapCells as defaultHeatmapCells, mockLineChartData } from '../mockData';
 import { Info, TrendingUp, AlertCircle, RefreshCw } from 'lucide-react';
+import { fetchAllConflicts } from '../services/api';
+import type { HeatCell } from '../mockData';
 
 interface HealthSummaryProps {
   onCellHover?: (label: string) => void;
@@ -13,8 +15,89 @@ interface HealthSummaryProps {
 
 export default function HealthSummary({ onCellHover }: HealthSummaryProps) {
   const [viewMode, setViewMode] = useState<'Line' | 'Heatmap'>('Heatmap');
-  const [hoveredCell, setHoveredCell] = useState<typeof heatmapCells[0] | null>(null);
+  const [hoveredCell, setHoveredCell] = useState<HeatCell | null>(null);
   const [activeSeries, setActiveSeries] = useState<string | null>(null);
+  const [heatmapCells, setHeatmapCells] = useState<HeatCell[]>(defaultHeatmapCells);
+
+  useEffect(() => {
+    let isMounted = true;
+    let intervalId: ReturnType<typeof setInterval>;
+
+    const loadData = async () => {
+      try {
+        const conflicts = await fetchAllConflicts();
+        if (!isMounted) return;
+        
+        if (conflicts && conflicts.length > 0) {
+          // Build 30 cells from top 10 conflicts (3 indicators each: GDP, Inflation, Poverty)
+          const newCells: HeatCell[] = [];
+          const topConflicts = conflicts.slice(0, 10);
+          let col = 0;
+          let row = 0;
+          const colorPalette = [
+            '#2C7A7B', '#1A365D', '#319795', '#2D3748', '#2D3047', '#5C3D46',
+            '#1B2E3C', '#2C3E50', '#222F3E', '#2D3436', '#3F3D56', '#30336B',
+            '#1E272E', '#3E343A', '#2F2F2F', '#20636B', '#2B2B3E', '#1F2A38',
+            '#1A2930', '#2E2D30', '#4A3B43', '#252627', '#2C3A47', '#1E2C33',
+            '#3EA395', '#423B33', '#2D8180', '#4A4A33', '#4F4349', '#3a8b8c'
+          ];
+
+          topConflicts.forEach((c: any) => {
+            const addCell = (indicator: string, value: number, quarterLabel: string) => {
+              if (newCells.length < 30) {
+                const score = Math.min(10, Math.max(-10, Math.round(value))); // Clamp to -10 to 10
+                newCells.push({
+                  row,
+                  col,
+                  country: c.country,
+                  indicator,
+                  quarterLabel,
+                  score: isNaN(score) ? 0 : score,
+                  colorClass: '',
+                  hexColor: colorPalette[newCells.length] || '#2D3748'
+                });
+                col++;
+                if (col > 5) {
+                  col = 0;
+                  row++;
+                }
+              }
+            };
+
+            addCell('GDP Change', c.gdpChange || 0, 'Current');
+            addCell('Inflation', -(c.inflationRate || 0)/10, 'Current'); // Negative score for high inflation
+            addCell('Poverty Rate', -(c.povertyRate || 0)/10, 'Current');
+          });
+
+          // Fill remaining if less than 30
+          while (newCells.length < 30) {
+            const idx = newCells.length;
+            newCells.push({
+              row: Math.floor(idx / 6),
+              col: idx % 6,
+              country: 'TBD',
+              indicator: 'Data Pending',
+              quarterLabel: 'TBD',
+              score: 0,
+              colorClass: '',
+              hexColor: colorPalette[idx] || '#2D3748'
+            });
+          }
+          setHeatmapCells(newCells);
+        }
+      } catch (err) {
+        console.error("Error fetching health summary conflicts:", err);
+      }
+    };
+
+    loadData();
+    intervalId = setInterval(loadData, 5000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
 
   // Helper coordinate calculations for custom interactive line chart
   const width = 580;

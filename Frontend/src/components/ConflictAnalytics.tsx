@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ShieldAlert,
   Calendar,
@@ -22,6 +22,7 @@ import {
   Globe,
   SearchCode
 } from 'lucide-react';
+import { fetchStats, fetchOngoingConflicts } from '../services/api';
 
 interface ConflictAnalyticsProps {
   onShowToast: (msg: string, type: 'success' | 'info') => void;
@@ -31,6 +32,49 @@ export default function ConflictAnalytics({ onShowToast }: ConflictAnalyticsProp
   const [zoomLevel, setZoomLevel] = useState<number>(1.0);
   const [activeFrictionTab, setActiveFrictionTab] = useState<'forecasting' | 'timeline'>('forecasting');
   const [selectedRange, setSelectedRange] = useState<string>('Last 24 Months');
+
+  // Live intelligence summary state
+  const [worstConflict, setWorstConflict] = useState<any>(null);
+  const [globalTension, setGlobalTension] = useState<string>('7.8');
+  
+  useEffect(() => {
+    let isMounted = true;
+    let intervalId: ReturnType<typeof setInterval>;
+
+    const loadData = async () => {
+      try {
+        const [conflicts, stats] = await Promise.all([
+          fetchOngoingConflicts(),
+          fetchStats()
+        ]);
+        
+        if (!isMounted) return;
+
+        if (conflicts && conflicts.length > 0) {
+          // Find the worst conflict by combination of inflation + negative GDP
+          const worst = conflicts.sort((a: any, b: any) => 
+            ((b.inflationRate || 0) - (b.gdpChange || 0)) - ((a.inflationRate || 0) - (a.gdpChange || 0))
+          )[0];
+          setWorstConflict(worst);
+        }
+
+        if (stats && stats.totalConflicts) {
+          const tensionScore = Math.min(10, 5 + (stats.ongoingConflicts * 0.1)).toFixed(1);
+          setGlobalTension(tensionScore);
+        }
+      } catch (e) {
+        console.error("Error fetching conflict analytics:", e);
+      }
+    };
+
+    loadData();
+    intervalId = setInterval(loadData, 5000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
 
   const handleExport = () => {
     onShowToast('EXPORTING CLASSIFIED GEOPOLITICAL RISK PROFILE // DISPATCHED TO PDF', 'success');
@@ -218,7 +262,7 @@ export default function ConflictAnalytics({ onShowToast }: ConflictAnalyticsProp
                     Global Tension Index
                   </span>
                   <span className="text-xl font-bold font-display text-white mt-1 block">
-                    7.8 <span className="text-xs text-gray-500">/ 10</span>
+                    {globalTension} <span className="text-xs text-gray-500">/ 10</span>
                   </span>
                 </div>
 
@@ -280,10 +324,10 @@ export default function ConflictAnalytics({ onShowToast }: ConflictAnalyticsProp
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-white transition-all">
-                    Black Sea Corridor Blockade
+                    {worstConflict ? worstConflict.conflictName : 'Monitoring Data...'}
                   </h4>
                   <span className="text-[9px] font-mono text-gray-500 block uppercase mt-1">
-                    Detected 02:14 UTC
+                    {worstConflict ? `Detected: Region ${worstConflict.region}` : 'Waiting for telemetry...'}
                   </span>
                 </div>
               </div>
@@ -293,20 +337,20 @@ export default function ConflictAnalytics({ onShowToast }: ConflictAnalyticsProp
                 {/* Severity score stat */}
                 <div className="bg-[#070b14]/50 border border-[#1e293b]/30 p-3 rounded-lg text-left">
                   <span className="text-[9px] font-mono text-gray-500 font-bold uppercase tracking-wider block">
-                    Severity Score
+                    Inflation Rate
                   </span>
                   <span className="text-2xl font-extrabold font-display text-red-500 block mt-1">
-                    9.2
+                    {worstConflict && worstConflict.inflationRate ? `${worstConflict.inflationRate}%` : '--'}
                   </span>
                 </div>
 
                 {/* Market volatility stat */}
                 <div className="bg-[#070b14]/50 border border-[#1e293b]/30 p-3 rounded-lg text-left">
                   <span className="text-[9px] font-mono text-gray-500 font-bold uppercase tracking-wider block">
-                    Market Volatility
+                    GDP Impact
                   </span>
                   <span className="text-2xl font-extrabold font-display text-orange-500 block mt-1">
-                    +14.5%
+                    {worstConflict && worstConflict.gdpChange ? `${worstConflict.gdpChange > 0 ? '+' : ''}${worstConflict.gdpChange}%` : '--'}
                   </span>
                 </div>
               </div>
