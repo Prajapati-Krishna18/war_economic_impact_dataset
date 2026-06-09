@@ -83,6 +83,60 @@ function Dashboard({ onSignOut, userEmail, onShowToast }: DashboardProps) {
   const [alerts, setAlerts] = useState<AlertData[]>(initialAlerts);
   const [activities, setActivities] = useState<ActivityData[]>(initialActivities);
   const [reports, setReports] = useState<ReportData[]>(initialReports);
+  const [kpiCardsData, setKpiCardsData] = useState<Record<string, KPICardData[]>>(initialKPICards);
+
+  // Fetch Live Data on mount
+  useEffect(() => {
+    import('./services/api').then(({ fetchStats, fetchOngoingConflicts }) => {
+      // 1. Fetch Global Stats for KPI Cards
+      fetchStats().then(stats => {
+        if (stats) {
+          setKpiCardsData(prev => {
+            const newGlobal = [...prev.Global];
+            
+            // Map stats to KPI cards
+            // 0: GDP
+            newGlobal[0] = { ...newGlobal[0], value: stats.lowestGDP?.gdpChange ? `${stats.lowestGDP.gdpChange}%` : newGlobal[0].value, changeLabel: `Worst GDP: ${stats.lowestGDP?.conflictName || ''}` };
+            // 1: Inflation
+            newGlobal[1] = { ...newGlobal[1], value: stats.highestInflation?.inflationRate ? `${stats.highestInflation.inflationRate}%` : newGlobal[1].value, changeLabel: `Highest: ${stats.highestInflation?.conflictName || ''}` };
+            // 2: Trade -> mapped to Cost of War or Ongoing Conflicts
+            newGlobal[2] = { ...newGlobal[2], title: 'ONGOING CONFLICTS', value: stats.ongoingConflicts?.toString() || newGlobal[2].value, changeLabel: 'Active global conflicts', unit: 'Conflicts' };
+            // 3: Geopolitical -> mapped to Total Conflicts
+            newGlobal[3] = { ...newGlobal[3], title: 'TOTAL RECORDED CONFLICTS', value: stats.totalConflicts?.toString() || newGlobal[3].value, changeLabel: 'All historical & active', unit: 'Conflicts' };
+            
+            return { ...prev, Global: newGlobal };
+          });
+        }
+      });
+
+      // 2. Fetch Ongoing Conflicts for Alerts and Activities
+      fetchOngoingConflicts().then((conflicts: any[]) => {
+        if (conflicts && conflicts.length > 0) {
+          // Map to Alerts
+          const liveAlerts: AlertData[] = conflicts.slice(0, 5).map(c => ({
+            id: c._id,
+            severity: c.inflationRate > 20 || c.gdpChange < -10 ? 'critical' : 'warning',
+            title: `Ongoing Crisis: ${c.conflictName}`,
+            description: `Region: ${c.region} | Country: ${c.country} | Start Year: ${c.startYear}`,
+            timeAgo: 'Live',
+            timestamp: new Date()
+          }));
+          setAlerts(liveAlerts);
+
+          // Map to Activities
+          const liveActivities: ActivityData[] = conflicts.slice(0, 6).map((c, index) => ({
+            id: `act-${c._id}`,
+            title: `${c.conflictName} continues to impact ${c.primaryAffectedSector || 'multiple sectors'}.`,
+            type: 'Conflict Update',
+            timeAgo: `${index + 1}h ago`,
+            timestamp: new Date(),
+            category: 'event'
+          }));
+          setActivities(liveActivities);
+        }
+      });
+    });
+  }, []);
 
   // Popups & Command Modals
   const [modalType, setModalType] = useState<'createAlert' | 'scheduleReport' | 'inviteUser' | null>(null);
@@ -151,8 +205,8 @@ function Dashboard({ onSignOut, userEmail, onShowToast }: DashboardProps) {
 
   // Filter dynamic KPI statistics based on dropdown regional selectors
   const activeKPIs = useMemo(() => {
-    return initialKPICards[selectedRegion] || initialKPICards['Global'];
-  }, [selectedRegion]);
+    return kpiCardsData[selectedRegion] || kpiCardsData['Global'];
+  }, [selectedRegion, kpiCardsData]);
 
   // Global search filtering logic (filters Alerts, Events, or Reports dynamically)
   const filteredAlerts = useMemo(() => {
