@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
-import { Search, Bell, AlertTriangle, User, ChevronDown, Check } from 'lucide-react';
+import { useState } from 'react';
+import { Search, Bell, ChevronDown } from 'lucide-react';
 
 interface TopbarProps {
   searchQuery: string;
-  setSearchQuery: (query: string) => void;
+
   onQuickActionClick: () => void;
   alertsCount: number;
   onSearchClick?: () => void;
@@ -16,7 +16,6 @@ interface TopbarProps {
 
 export default function Topbar({
   searchQuery,
-  setSearchQuery,
   onQuickActionClick,
   alertsCount,
   onSearchClick,
@@ -113,7 +112,7 @@ export default function Topbar({
 
         <div className="h-6 w-[1px] bg-[#1e293b]"></div>
 
-        {/* User profile dropdown block */}
+        {/*  profile dropdown block */}
         <div className="relative" id="user-profile-widget">
           <button
             id="btn-profile-dropdown"

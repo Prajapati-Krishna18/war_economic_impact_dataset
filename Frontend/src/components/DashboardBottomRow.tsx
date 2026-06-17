@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+
 import {
   History,
   FileText,
@@ -11,9 +11,7 @@ import {
   PlusCircle,
   Calendar,
   UserPlus,
-  Compass,
   Download,
-  CheckCircle2,
 } from 'lucide-react';
 import type { ActivityData, ReportData } from '../types';
 

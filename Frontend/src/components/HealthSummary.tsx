@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { heatmapCells as defaultHeatmapCells, mockLineChartData } from '../mockData';
-import { Info, TrendingUp, AlertCircle, RefreshCw } from 'lucide-react';
+import { Info } from 'lucide-react';
 import { fetchAllConflicts } from '../services/api';
 import type { HeatCell } from '../mockData';
 

@@ -3,17 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   ArrowLeftRight,
   Calendar,
   FileDown,
   Plus,
   Minus,
-  Maximize2,
-  RefreshCw,
-  TrendingUp,
-  MapPin,
   ChevronDown
 } from 'lucide-react';
 
@@ -27,7 +23,6 @@ export default function RegionalIntelligence({ onShowToast }: RegionalIntelligen
   const [selectedRegion, setSelectedRegion] = useState<RegionId>('europe');
   const [zoomScale, setZoomScale] = useState<number>(1.0);
   const [is3DMode, setIs3DMode] = useState<boolean>(false);
-  const [activeSegmentIndex, setActiveSegmentIndex] = useState<number>(0);
   const [selectedQuarter, setSelectedQuarter] = useState<string>('Q3 2024');
 
   // Trigger region switch

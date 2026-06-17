@@ -1,29 +1,8 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import {
   FileDown,
-  Globe,
-  Sliders,
-  TrendingUp,
-  ShieldAlert,
-  ArrowLeftRight,
-  Briefcase,
-  FileText,
-  Bell,
-  Settings as SettingsIcon,
-  HelpCircle,
-  Clock,
   ChevronDown,
-  AlertOctagon,
-  Search,
-  BookOpen,
-  Anchor,
-  Filter,
-  CheckCircle,
-  CornerDownRight,
-  AlertTriangle,
-  UserPlus,
-  RefreshCw,
 } from 'lucide-react';
 
 import Sidebar from './components/Sidebar';
@@ -58,14 +37,14 @@ interface DashboardProps {
   onShowToast: (msg: string, type: 'success' | 'info') => void;
 }
 
-function Dashboard({ onSignOut, userEmail, onShowToast }: DashboardProps) {
+function Dashboard({ onSignOut, onShowToast }: DashboardProps) {
   // Navigation & Hierarchy State
   const [activeTab, setActiveTab] = useState<SidebarTab>('Dashboard');
   const [selectedRegion, setSelectedRegion] = useState<string>('Global');
   const [timeRange, setTimeRange] = useState<string>('Last 30 Days');
 
   // Search Engine
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery] = useState('');
   const [isSearchOverlayOpen, setIsSearchOverlayOpen] = useState(false);
 
   useEffect(() => {
@@ -272,7 +251,7 @@ function Dashboard({ onSignOut, userEmail, onShowToast }: DashboardProps) {
         {/* 2. TOPBAR CONTAINER */}
         <Topbar
           searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
+          
           onQuickActionClick={() => openActionForm('createAlert')}
           alertsCount={unreadAlertsCount}
           onSearchClick={() => setIsSearchOverlayOpen(true)}

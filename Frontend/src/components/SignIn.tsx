@@ -12,9 +12,7 @@ import {
   X,
   CheckCircle,
   LogIn,
-  Key,
-  Globe,
-  Database
+  Key
 } from 'lucide-react';
 
 interface SignInProps {

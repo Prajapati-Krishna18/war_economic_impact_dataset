@@ -5,8 +5,6 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
-  Search,
-  Clock,
   Star,
   Infinity as InfinityIcon,
   FileText,
@@ -14,11 +12,8 @@ import {
   Users,
   Flag,
   TrendingUp,
-  X,
   History,
-  CornerDownLeft,
-  Command,
-  Plus
+  CornerDownLeft
 } from 'lucide-react';
 
 interface SearchItem {
@@ -307,7 +302,7 @@ export default function SearchOverlay({ isOpen, onClose, onShowToast, onNavigate
       onClick={handleBackdropClick}
       className="fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-all duration-300 animate-in fade-in select-none"
     >
-      {/* Centered Command Palette Panel */}
+      {/* Centered  Palette Panel */}
       <div
         ref={containerRef}
         className="bg-[#111625] border border-[#1e293b]/80 rounded-2xl w-full max-w-xl shadow-2xl relative flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
@@ -316,7 +311,7 @@ export default function SearchOverlay({ isOpen, onClose, onShowToast, onNavigate
         {/* TOP: INPUT MODULE */}
         <div className="p-4 border-b border-[#1e293b]/40 flex items-center gap-3 bg-[#0a0d17]/50">
           
-          {/* Custom Search Magnifier + Lines Logo Icon as shown in the screenshot */}
+          {/* Custom  Magnifier + Lines Logo Icon as shown in the screenshot */}
           <div className="flex items-center gap-1.5 text-brand-cyan shrink-0" id="brand-indicator-search">
             <svg
               className="w-5 h-5 text-brand-cyan"
@@ -431,7 +426,7 @@ export default function SearchOverlay({ isOpen, onClose, onShowToast, onNavigate
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        {/* History Clock Icon */}
+                        {/* History  Icon */}
                         <div className="h-7 w-7 rounded-lg bg-[#151b2d] flex items-center justify-center text-gray-400 shrink-0 border border-[#1e293b]/50">
                           <History size={13} className="text-gray-400" />
                         </div>
@@ -548,7 +543,7 @@ export default function SearchOverlay({ isOpen, onClose, onShowToast, onNavigate
           {extendedGroup.length > 0 && (
             <div className="space-y-1.5 pt-2 text-left animate-in fade-in">
               <h4 className="px-2 text-[9.5px] font-mono font-bold text-gray-500 uppercase tracking-widest">
-                Search Corpus Matches
+                 Corpus Matches
               </h4>
 
               <div className="space-y-1">

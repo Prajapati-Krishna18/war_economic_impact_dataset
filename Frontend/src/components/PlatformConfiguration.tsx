@@ -7,30 +7,17 @@ import React, { useState } from 'react';
 import {
   User,
   Shield,
-  Sliders,
   Settings,
-  Key,
-  Smartphone,
-  Laptop,
-  CheckCircle,
-  AlertTriangle,
-  Download,
-  Database,
   Plus,
   RefreshCw,
   X,
-  Upload,
   Network,
   Palette,
   Bell,
   HardDrive,
-  Cpu,
-  Globe,
   Share2,
   Trash2,
-  Lock,
-  ChevronRight,
-  Sparkles
+  ChevronRight
 } from 'lucide-react';
 import SecuritySettings from './SecuritySettings';
 
@@ -96,7 +83,6 @@ export default function PlatformConfiguration({ onShowToast }: PlatformConfigura
   // Appearance tab state
   const [themePreset, setThemePreset] = useState('Cosmic Slate');
   const [fontFamily, setFontFamily] = useState('Inter & Space Grotesk');
-  const [contrastSetting, setContrastSetting] = useState('High Contrast');
   const [acrylicBlur, setAcrylicBlur] = useState(true);
 
   // Notification tab state
@@ -313,7 +299,7 @@ export default function PlatformConfiguration({ onShowToast }: PlatformConfigura
                     </div>
                   </div>
 
-                  {/* Actions Upload Button */}
+                  {/* Actions  Button */}
                   <div className="pt-2">
                     <button
                       onClick={handleLogoUploadClick}

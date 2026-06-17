@@ -3,25 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
-import {
-  ShieldAlert,
-  Calendar,
-  FileDown,
-  Search,
-  Maximize2,
-  Minimize2,
-  Info,
-  ChevronDown,
-  TrendingUp,
-  AlertTriangle,
-  Compass,
-  Play,
-  RotateCcw,
-  Zap,
-  Globe,
-  SearchCode
-} from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { FileDown, Search, Minimize2, ChevronDown, TrendingUp, Compass, RotateCcw, AlertTriangle } from 'lucide-react';
 import { fetchStats, fetchOngoingConflicts } from '../services/api';
 
 interface ConflictAnalyticsProps {

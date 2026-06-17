@@ -15,17 +15,11 @@ import {
   Globe2,
   Users,
   Search,
-  Sliders,
-  RotateCw,
   Download,
   FileSpreadsheet,
-  FileDown,
   X,
-  Check,
   Zap,
-  CheckCircle,
-  HelpCircle,
-  ArrowRight
+  CheckCircle
 } from 'lucide-react';
 
 interface IntelligenceReportsProps {
@@ -168,7 +162,7 @@ export default function IntelligenceReports({ onShowToast }: IntelligenceReports
   const [newExcerpt, setNewExcerpt] = useState<string>('');
   const [newCategory, setNewCategory] = useState<ReportCategory>('Economic');
   const [newShare, setNewShare] = useState<ShareScope>('Private');
-  const [newStatus, setNewStatus] = useState<'Draft' | 'Scheduled' | 'Published'>('Published');
+  const [newStatus, ] = useState<'Draft' | 'Scheduled' | 'Published'>('Published');
 
   // Trigger modals/options
   const [showRunConfigModal, setShowRunConfigModal] = useState<boolean>(false);
