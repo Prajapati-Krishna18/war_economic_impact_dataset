@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Calendar,
   ChevronDown,
   PlusCircle,
-  TrendingUp,
   Search,
   SlidersHorizontal,
   Lightbulb,
@@ -24,7 +23,6 @@ type TabType = 'indicator' | 'compare';
 export default function IndicatorsIndex({ onShowToast }: IndicatorsIndexProps) {
   const [activeSegment, setActiveSegment] = useState<TabType>('indicator');
   const [searchQuery, setSearchQuery] = useState('');
-  const [dateRange, setDateRange] = useState('Date Range');
   const [selectedIndicator, setSelectedIndicator] = useState<'PMI' | 'Consumer' | 'Yield'>('PMI');
 
   const handleIndicatorClick = (indicator: 'PMI' | 'Consumer' | 'Yield') => {

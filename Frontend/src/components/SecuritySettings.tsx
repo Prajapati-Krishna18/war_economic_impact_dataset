@@ -8,19 +8,14 @@ import {
   User,
   Shield,
   Sliders,
-  Settings,
   Key,
   Smartphone,
   Laptop,
-  CheckCircle,
-  AlertOctagon,
   Download,
   Database,
   Plus,
   RefreshCw,
-  X,
-  Lock,
-  FileDown
+  X
 } from 'lucide-react';
 
 interface SecuritySettingsProps {
@@ -47,7 +42,7 @@ interface ActiveSession {
 export default function SecuritySettings({ onShowToast }: SecuritySettingsProps) {
   // Mock data for editable information
   const [fullName, setFullName] = useState('Alexander Vance');
-  const [analystId, setAnalystId] = useState('ECON-7742-INTEL');
+  const [analystId] = useState('ECON-7742-INTEL');
   const [email, setEmail] = useState('a.vance@econ-sentinel.int');
   const [department, setDepartment] = useState('Strategic Risk & Global Markets');
 

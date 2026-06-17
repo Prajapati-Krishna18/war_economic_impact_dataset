@@ -3,21 +3,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
-import { SlidersHorizontal, BellRing, Info, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { SlidersHorizontal, ShieldCheck } from 'lucide-react';
 import type { AlertData } from '../types';
 
 interface AlertIntelligenceProps {
   alerts: AlertData[];
   onDismissAlert?: (id: string) => void;
-  onClearAllAlerts?: () => void;
+  
   onViewAllAlertsClick?: () => void;
 }
 
 export default function AlertIntelligence({
   alerts,
   onDismissAlert,
-  onClearAllAlerts,
   onViewAllAlertsClick,
 }: AlertIntelligenceProps) {
   return (

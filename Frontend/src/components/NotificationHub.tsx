@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Bell,
   CheckCircle,
@@ -15,17 +15,9 @@ import {
   Globe,
   Database,
   ChevronDown,
-  Info,
-  Sliders,
-  RotateCw,
-  MoreVertical,
   X,
   Download,
-  ExternalLink,
-  ChevronRight,
-  TrendingDown,
-  AlertTriangle,
-  Play
+  ExternalLink
 } from 'lucide-react';
 
 interface NotificationHubProps {

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
 import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import type { KPICardData } from '../types';
 
@@ -33,8 +32,6 @@ export default function KPICards({ cards }: KPICardsProps) {
       className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 select-none"
     >
       {cards.map((card) => {
-        const isTradeVol = card.id === 'trade';
-        const isGDP = card.id === 'gdp';
         const isInflation = card.id === 'inflation';
         const isGeopolitical = card.id === 'geopolitical';
 

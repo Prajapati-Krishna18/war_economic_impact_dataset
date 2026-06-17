@@ -12,7 +12,6 @@ import {
   Activity,
   Mail,
   ShieldAlert,
-  Search,
   Sliders,
   RotateCw,
   MoreVertical,
@@ -22,8 +21,7 @@ import {
   Trash2,
   X,
   CheckCircle,
-  AlertTriangle,
-  Play
+  AlertTriangle
 } from 'lucide-react';
 
 interface UserAdministrationProps {
@@ -142,7 +140,6 @@ export default function UserAdministration({ onShowToast }: UserAdministrationPr
   const [selectedUserId, setSelectedUserId] = useState<string>('ES-INTEL-88901');
   const [checkedUsers, setCheckedUsers] = useState<Record<string, boolean>>({});
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
-  const [tableSearchText, setTableSearchText] = useState<string>('');
 
   const selectedUser = usersList.find(u => u.id === selectedUserId) || usersList[0];
 
